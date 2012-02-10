@@ -34,7 +34,7 @@ public class GUI extends JPanel implements MouseMotionListener, ActionListener, 
     private float distance;
     
     private Set enemies;
-    private Rectangle bbox;
+    private int[] borders;
     
     private boolean up1, down1, left1, right1, up2, down2, left2, right2;
 			
@@ -56,10 +56,16 @@ public class GUI extends JPanel implements MouseMotionListener, ActionListener, 
         highscore = 0;
         mouseSpeed = 1;             
         width = this.getWidth();
-        height = this.getHeight();     
+        height = this.getHeight();    
+        System.out.println(height);
         mouseX1 = width/2;
         mouseY1 = (height+100)/2;
-        bbox = new Rectangle(50, 50, width-50, height-50);
+
+        borders = new int[4];
+        borders[0] = 15;
+        borders[1] = 15;
+        borders[2] = width-20;
+        borders[3] = height-20;
         
         makeMenuScreen();
         this.add(menu);
@@ -230,7 +236,7 @@ public class GUI extends JPanel implements MouseMotionListener, ActionListener, 
         }
         else 
         {
-        	enemies = new HashSet();
+            enemies = new HashSet();
         }
     }
     
@@ -243,10 +249,10 @@ public class GUI extends JPanel implements MouseMotionListener, ActionListener, 
             case 1:                              
                 distance = 600;
                 monsterN = 20;
-                randomN = 20;
+                randomN = 1;
                 rainN = 30;
                 defaultDistance = 600;
-                timeLast = 20000;
+                timeLast = 2000000;
                 spawnCircleB = true;
                 break;
             case 2:
@@ -300,8 +306,11 @@ public class GUI extends JPanel implements MouseMotionListener, ActionListener, 
     {
         g.setColor(Color.blue);
         g.drawRect(10, 10, width-20, height-20);
+
+        borders[2] = width-20;
+        borders[3] = height-20;
         
-        if(!bbox.contains(mouseX1, mouseY1))
+        if(mouseX1 < borders[0] || mouseY1 < borders[1] || mouseX1 > borders[2] || mouseY1 > borders[3])
         {
             if(!countdownF)
             {
@@ -392,7 +401,7 @@ public class GUI extends JPanel implements MouseMotionListener, ActionListener, 
             	r = (float)Math.sqrt(Math.pow(mouseX1 - x, 2) + Math.pow(mouseY1 - y, 2));
             }
             
-            enemies.add(new EnemyTypes.Monster(x, y, 4));
+            enemies.add(new EnemyTypes.Monster(x, y, 0.1f));
         }
 
         spawnMonsterB = false;
@@ -413,7 +422,7 @@ public class GUI extends JPanel implements MouseMotionListener, ActionListener, 
                 r = (float) Math.sqrt(Math.pow(mouseX1 - x, 2) + Math.pow(mouseY1 - y, 2));
             }
             
-            enemies.add(new EnemyTypes.Random(x, y, 2, bbox));
+            enemies.add(new EnemyTypes.Random(x, y, 0.5f, borders));
         }
 
         spawnRandomersB = false;
@@ -581,7 +590,7 @@ public class GUI extends JPanel implements MouseMotionListener, ActionListener, 
                 Enemy e = (Enemy)i.next();
                 e.move(mouseX1, mouseY1);
                 e.paint(g);
-                //collision = collision || e.collidesWith(mouseX1, mouseY1);
+                
                 if(e.collidesWith(mouseX1, mouseY1))
                 {
                 	collision = true;

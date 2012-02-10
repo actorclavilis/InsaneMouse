@@ -1,4 +1,4 @@
-package insanity.enemies;
+package insanity;
 
 import javax.swing.*;
 import java.awt.*;
@@ -100,41 +100,42 @@ public final class EnemyTypes
     public static class Random extends Enemy 
     {
         private float vx, vy;
-        private Rectangle bbox;
+        int[] borders;
 
         public Color getColor() 
         {
             return Color.GREEN;
         }
 
-        public Random(float _x, float _y, float _speed, Rectangle _bbox) 
+        public Random(float _x, float _y, float _speed, int[] _borders) 
         {
             super(_x, _y);
             double ang = Math.random() * Math.PI;
             vx = _speed * (float) Math.abs(Math.cos(ang));
             vy = _speed * (float) Math.abs(Math.sin(ang));
-            bbox = _bbox;
+            
+            borders = _borders;
         }
 
         public Random(int _x, int _y) 
         {
-            this(_x, _y, 4, new Rectangle(0, 0, 0, 0));
+            this(_x, _y, 4, null);
         }
 
         public void move(int mx, int my)
-        {
-            x += vx;
-            y += vy;
-            
-            if(x > bbox.getMaxX() || x < bbox.getMinX())
-            {
+        {     
+            if((x > borders[2])||(x < borders[0]))
+            {                
                 vx *= -1;
             }
             
-            if (y > bbox.getMaxY() || y < bbox.getMinY())
-            {
+            if ((y > borders[3])||(y < borders[1]))
+            {                
                 vy *= -1;
             }
+            
+            x += vx;
+            y += vy;
         }
     }
 
