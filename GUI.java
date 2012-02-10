@@ -512,6 +512,7 @@ public class GUI extends JPanel implements MouseMotionListener, ActionListener, 
                                 }
                             }
                             enemies = newEnemies;
+                            spawnBomb();
                             ballN = 1;
                             distance = defaultDistance;
                             circular = !circular;                           

@@ -113,8 +113,10 @@ public final class EnemyTypes
         {
             super(_x, _y);
             double ang = Math.random() * Math.PI;
-            vx = _speed * (float) Math.abs(Math.cos(ang));
-            vy = _speed * (float) Math.abs(Math.sin(ang));
+            int qx = (Math.random() > .5)? 1: -1;
+            int qy = (Math.random() > .5)? 1: -1;
+            vx = _speed * qx * (float) Math.abs(Math.cos(ang));
+            vy = _speed * qy * (float) Math.abs(Math.sin(ang));
             
             borders = _borders;
         }
@@ -172,7 +174,7 @@ public final class EnemyTypes
     public static class Bomb extends Monster {
         private SetCallback mod;
         private int[] borders;
-        private static final int PIECES = 40;
+        private static final int PIECES = 10;
         private boolean existant = true;
         
         public Color getColor() {
@@ -186,17 +188,19 @@ public final class EnemyTypes
         }
         
         public void move(int mx, int my) {
-            super.move(mx, my);
-            if(distanceFrom(mx, my) < 40) {
-                for (int i = 0; i < PIECES; i++) {
-                    Enemy e = new EnemyTypes.Random (x, y, speed, borders) {
-                        public boolean isMortal() {
-                            return true;
-                        }
-                    };
-                    mod.add(e);
+            if(existant) {
+                super.move(mx, my);
+                if(distanceFrom(mx, my) < 1000) {
+                    for (int i = 0; i < PIECES; i++) {
+                        Enemy e = new EnemyTypes.Random (x, y, speed, borders) {
+                            public boolean isMortal() {
+                                return true;
+                            }
+                        };
+                        mod.add(e);
+                    }
+                    existant = false;
                 }
-                existant = false;
             }
         }
         
