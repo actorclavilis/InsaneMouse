@@ -443,12 +443,12 @@ public class GUI extends JPanel implements MouseMotionListener, ActionListener, 
     private void spawnBomb() {
         float x,y;
         if(Math.random() > .5) { //top/bottom
-            y = (Math.random()>.5)? 0: height;
-            x = (float)Math.random()*width;
+            y = (Math.random()>.5)? borders[1]: borders[3];
+            x = (float)Math.random()*borders[2]-borders[0]; //width
         }
         else {
-            x = (Math.random()>.5)? 0: width;
-            y = (float)Math.random()*height;
+            x = (Math.random()>.5)? borders[0]: borders[2];
+            y = (float)Math.random()*borders[3]-borders[1]; //height
         }
         enemies.add(new EnemyTypes.Bomb(x, y, 1f, borders, scbInstance));
     }
@@ -514,8 +514,8 @@ public class GUI extends JPanel implements MouseMotionListener, ActionListener, 
                             }
                             enemies = newEnemies;
                             spawnBomb();
-                            if(iter++%3==0)
-                            	spawnMonsters();
+                            //if(iter++%3==0)
+                            //	spawnMonsters();
                             ballN = 1;
                             distance = defaultDistance;
                             circular = !circular;                           
@@ -585,19 +585,19 @@ public class GUI extends JPanel implements MouseMotionListener, ActionListener, 
         {                  
             if((spawnCircleB)&&(spawnIncrease))
             {
-                spawnCircles();
+                //spawnCircles();
             }
             if(spawnMonsterB)
             {
-                spawnMonsters();
+                //spawnMonsters();
             }
             if(spawnRandomersB)
             {
-                spawnRandomers();
+               // spawnRandomers();
             }
             if(spawnRainB)
             {
-                spawnRain();
+                //spawnRain();
             }
             
             //g.drawString(Integer.toString(mouseX1),mouseX1,mouseY1);
