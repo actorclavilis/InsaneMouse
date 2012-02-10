@@ -1,0 +1,4 @@
+This folder contains random utility classes and interfaces. If it does anything visible to the user, this is probably not where it goes.
+
+Current content:
+  SetCallback.java: Implements the single Add interface of a set object. Used by certain Enemy subclasses to add more enemies to the enemy list (namely, the bomb adds explosion pieces).
