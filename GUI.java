@@ -396,7 +396,7 @@ public class GUI extends JPanel implements MouseMotionListener, ActionListener, 
             	r = (float)Math.sqrt(Math.pow(mouseX1 - x, 2) + Math.pow(mouseY1 - y, 2));
             }
             
-            enemies.add(new EnemyTypes.Monster(x, y, 0.1f));
+            enemies.add(new EnemyTypes.Monster(x, y, 1f));
         }
 
         spawnMonsterB = false;
@@ -450,9 +450,10 @@ public class GUI extends JPanel implements MouseMotionListener, ActionListener, 
             x = (Math.random()>.5)? 0: width;
             y = (float)Math.random()*height;
         }
-        enemies.add(new EnemyTypes.Bomb(x, y, 4, borders, scbInstance));
+        enemies.add(new EnemyTypes.Bomb(x, y, .8f, borders, scbInstance));
     }
     
+    int iter = 0;
     private void animate()
     {
         r = new Thread() 
@@ -513,6 +514,8 @@ public class GUI extends JPanel implements MouseMotionListener, ActionListener, 
                             }
                             enemies = newEnemies;
                             spawnBomb();
+                            if(iter++%3==0)
+                            	spawnMonsters();
                             ballN = 1;
                             distance = defaultDistance;
                             circular = !circular;                           
@@ -597,8 +600,8 @@ public class GUI extends JPanel implements MouseMotionListener, ActionListener, 
                 spawnRain();
             }
             
-            g.drawString(Integer.toString(mouseX1),mouseX1,mouseY1);
-            g.drawString(Integer.toString(mouseY1),mouseX1,mouseY1+15);
+            //g.drawString(Integer.toString(mouseX1),mouseX1,mouseY1);
+            //g.drawString(Integer.toString(mouseY1),mouseX1,mouseY1+15);
             Iterator i = enemies.iterator();
             while(i.hasNext()) 
             {
