@@ -317,14 +317,15 @@ public class GUI extends JPanel implements MouseMotionListener, ActionListener, 
             }
         } 
         
+        /*
         if(collision)
         {
         	g.drawString(String.valueOf(lives), width/2-20, height/2-40);
         	lives--;
         	collision = false;
-        }
+        }*/
         
-        if(lives == 0)
+        if(collision)
         {
             g.setColor(Color.red.darker());
             g.drawString("GAME OVER", width/2-20, height/2);          
@@ -479,7 +480,7 @@ public class GUI extends JPanel implements MouseMotionListener, ActionListener, 
                     {
                         countdown();
                         
-                        if(lives == 0)
+                        if(collision)
                         {                       
                             if(highscore < score)
                             {
