@@ -21,20 +21,21 @@ public class GUI extends JPanel implements MouseMotionListener, ActionListener, 
     private int multiplier,highscore, score, level;
     private int invSpeed, defaultDistance, width, height, timeDifficulty1, timeDifficulty2, distanceLimit;
     private int lives;
+    private int[] borders;
     
-    private long startTime, timeElapse, timeLast, timeCircle, timeRain;
+    private long startTime, timeElapse, systemSpeed, timeLast, timeCircle, timeRain;
     
     private boolean countdownF, spawnCircleB, spawnMonsterB, spawnRandomersB, spawnRainB;
     private boolean circular, spawnIncrease, collision;
-       
+    private boolean up1, down1, left1, right1, up2, down2, left2, right2;
+    
     private float distance;
     
     private Set enemies;
-    private int[] borders;
-    
-    private boolean up1, down1, left1, right1, up2, down2, left2, right2;
-			
+    			
     private Thread t, r;
+    
+    private scbClass scbInstance = new scbClass();
     
     public GUI(Dimension a) throws Exception
     {                   
@@ -71,75 +72,75 @@ public class GUI extends JPanel implements MouseMotionListener, ActionListener, 
     {
     	if(e.getID() == KeyEvent.KEY_PRESSED)
     	{  	
-	    	if(e.getKeyCode() == KeyEvent.VK_W)
-	    	{
-	    		up1 = true;    		
-	    	}
-	    	if(e.getKeyCode() == KeyEvent.VK_S)
-	    	{
-	    		down1 = true;
-	    	}
-	    	if(e.getKeyCode() == KeyEvent.VK_A)
-	    	{
-	    		left1 = true;
-	    	}
-	    	if(e.getKeyCode() == KeyEvent.VK_D)
-	    	{
-	    		right1 = true;
-	    	}
-	    	if(e.getKeyCode() == KeyEvent.VK_NUMPAD8)
-	    	{
-	    		up1 = true;    		
-	    	}
-	    	if(e.getKeyCode() == KeyEvent.VK_NUMPAD5)
-	    	{
-	    		down1 = true;
-	    	}
-	    	if(e.getKeyCode() == KeyEvent.VK_NUMPAD4)
-	    	{
-	    		left1 = true;
-	    	}
-	    	if(e.getKeyCode() == KeyEvent.VK_NUMPAD6)
-	    	{
-	    		right1 = true;
-	    	}
-	    }
+            if(e.getKeyCode() == KeyEvent.VK_W)
+            {
+                up1 = true;    		
+            }
+            if(e.getKeyCode() == KeyEvent.VK_S)
+            {
+                down1 = true;
+            }
+            if(e.getKeyCode() == KeyEvent.VK_A)
+            {
+                left1 = true;
+            }
+            if(e.getKeyCode() == KeyEvent.VK_D)
+            {
+                right1 = true;
+            }
+            if(e.getKeyCode() == KeyEvent.VK_NUMPAD8)
+            {
+                up1 = true;    		
+            }
+            if(e.getKeyCode() == KeyEvent.VK_NUMPAD5)
+            {
+                down1 = true;
+            }
+            if(e.getKeyCode() == KeyEvent.VK_NUMPAD4)
+            {
+                left1 = true;
+            }
+            if(e.getKeyCode() == KeyEvent.VK_NUMPAD6)
+            {
+                right1 = true;
+            }
+        }
 	    
-	    if(e.getID() == KeyEvent.KEY_RELEASED)
-	    {	
-	    	if(e.getKeyCode() == KeyEvent.VK_W)
-	    	{
-	    		up1 = false;    		
-	    	}
-	    	if(e.getKeyCode() == KeyEvent.VK_S)
-	    	{
-	    		down1 = false;
-	    	}
-	    	if(e.getKeyCode() == KeyEvent.VK_A)
-	    	{
-	    		left1 = false;
-	    	}
-	    	if(e.getKeyCode() == KeyEvent.VK_D)
-	    	{
-	    		right1 = false;
-	    	}
-	    	if(e.getKeyCode() == KeyEvent.VK_NUMPAD8)
-	    	{
-	    		up1 = false;    		
-	    	}
-	    	if(e.getKeyCode() == KeyEvent.VK_NUMPAD5)
-	    	{
-	    		down1 = false;
-	    	}
-	    	if(e.getKeyCode() == KeyEvent.VK_NUMPAD4)
-	    	{
-	    		left1 = false;
-	    	}
-	    	if(e.getKeyCode() == KeyEvent.VK_NUMPAD6)
-	    	{
-	    		right1 = false;
-	    	}
-	    }
+        if(e.getID() == KeyEvent.KEY_RELEASED)
+        {	
+            if(e.getKeyCode() == KeyEvent.VK_W)
+            {
+                up1 = false;    		
+            }
+            if(e.getKeyCode() == KeyEvent.VK_S)
+            {
+                down1 = false;
+            }
+            if(e.getKeyCode() == KeyEvent.VK_A)
+            {
+                left1 = false;
+            }
+            if(e.getKeyCode() == KeyEvent.VK_D)
+            {
+                right1 = false;
+            }
+            if(e.getKeyCode() == KeyEvent.VK_NUMPAD8)
+            {
+                up1 = false;    		
+            }
+            if(e.getKeyCode() == KeyEvent.VK_NUMPAD5)
+            {
+                down1 = false;
+            }
+            if(e.getKeyCode() == KeyEvent.VK_NUMPAD4)
+            {
+                left1 = false;
+            }
+            if(e.getKeyCode() == KeyEvent.VK_NUMPAD6)
+            {
+                right1 = false;
+            }
+        }
 	    
     	return false;
     }
@@ -211,6 +212,7 @@ public class GUI extends JPanel implements MouseMotionListener, ActionListener, 
         timeCircle = 0;
         timeRain = 0;
         lives = 3;
+        systemSpeed = 0;
                       
         countdownF = true;
         circular = true;
@@ -218,7 +220,7 @@ public class GUI extends JPanel implements MouseMotionListener, ActionListener, 
         spawnCircleB = false;  
         spawnMonsterB = false;
         spawnRandomersB = false;
-        collision = false;                   
+        collision = false;    
                         
         levelSetup();
         countdown();
@@ -333,7 +335,6 @@ public class GUI extends JPanel implements MouseMotionListener, ActionListener, 
     {       
         t = new Thread() 
         {
-
             public void run()
             {   
                 long time = System.currentTimeMillis();
@@ -443,14 +444,14 @@ public class GUI extends JPanel implements MouseMotionListener, ActionListener, 
         spawnRainB = false; 
     }
            
-    private class scbClass implements util.SetCallback {
-        public void add(Object o) {
+    private class scbClass implements util.SetCallback 
+    {
+        public void add(Object o) 
+        {
             enemies.add(o);
         }
     }
-    
-    private scbClass scbInstance = new scbClass();
-    
+           
     private void spawnBomb()                           
     {
         float x,y;
@@ -470,11 +471,10 @@ public class GUI extends JPanel implements MouseMotionListener, ActionListener, 
     {
         r = new Thread() 
         {
-
             public void run()
             {
                 while(true)
-                {               
+                {                                  
                     if(!countdownF)
                     {
                         countdown();
@@ -490,6 +490,12 @@ public class GUI extends JPanel implements MouseMotionListener, ActionListener, 
                         } 
                         
                         timeElapse = 1+System.currentTimeMillis()-startTime;                         
+                        
+                        while(systemSpeed > timeElapse) //slows down program for faster PCs
+                        {
+                            timeElapse = 1+System.currentTimeMillis()-startTime;
+                        }
+                        systemSpeed = timeElapse + 3;
                         
                         if(timeElapse > timeCircle)
                         {
@@ -527,7 +533,9 @@ public class GUI extends JPanel implements MouseMotionListener, ActionListener, 
                             enemies = newEnemies;
                             spawnBomb();
                             if(iter++%3==0)
+                            {
                             	spawnMonsters();
+                            }
                             ballN = 1;
                             distance = defaultDistance;
                             circular = !circular;                           
@@ -538,7 +546,6 @@ public class GUI extends JPanel implements MouseMotionListener, ActionListener, 
                     {
                         SwingUtilities.invokeAndWait(new Runnable() 
                         {
-
                             public void run()
                             {
                                 repaint();
@@ -559,19 +566,19 @@ public class GUI extends JPanel implements MouseMotionListener, ActionListener, 
     {
     	if(up1)
     	{
-    		mouseY1 -= mouseSpeed;    		
+            mouseY1 -= mouseSpeed;    		
     	}
     	if(down1)
     	{
-    		mouseY1 += mouseSpeed;
+            mouseY1 += mouseSpeed;
     	}
     	if(left1)
     	{
-    		mouseX1 -= mouseSpeed;
+            mouseX1 -= mouseSpeed;
     	}
     	if(right1)
     	{
-    		mouseX1 += mouseSpeed;
+            mouseX1 += mouseSpeed;
     	}
     }
    
