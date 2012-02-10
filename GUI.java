@@ -1,4 +1,3 @@
-package insanity;
 
 import java.awt.*;
 import java.awt.event.*;
@@ -10,7 +9,7 @@ import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
-import insanity.enemies.*;
+import enemies.*;
 
 
 public class GUI extends JPanel implements MouseMotionListener, ActionListener, KeyEventDispatcher

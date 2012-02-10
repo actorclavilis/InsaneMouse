@@ -1,4 +1,4 @@
-package insanity;
+package enemies;
 
 import java.awt.*;
 
