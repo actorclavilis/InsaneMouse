@@ -244,7 +244,7 @@ public class GUI extends JPanel implements MouseMotionListener, ActionListener, 
             case 1:                              
                 distance = 600;
                 monsterN = 20;
-                randomN = 1;
+                randomN = 5;
                 rainN = 30;
                 defaultDistance = 600;
                 timeLast = 2000000;
@@ -396,7 +396,7 @@ public class GUI extends JPanel implements MouseMotionListener, ActionListener, 
             	r = (float)Math.sqrt(Math.pow(mouseX1 - x, 2) + Math.pow(mouseY1 - y, 2));
             }
             
-            enemies.add(new EnemyTypes.Monster(x, y, 1f));
+            enemies.add(new EnemyTypes.Monster(x, y, .8f));
         }
 
         spawnMonsterB = false;
@@ -450,7 +450,7 @@ public class GUI extends JPanel implements MouseMotionListener, ActionListener, 
             x = (Math.random()>.5)? 0: width;
             y = (float)Math.random()*height;
         }
-        enemies.add(new EnemyTypes.Bomb(x, y, .8f, borders, scbInstance));
+        enemies.add(new EnemyTypes.Bomb(x, y, 1f, borders, scbInstance));
     }
     
     int iter = 0;

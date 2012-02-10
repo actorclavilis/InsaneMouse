@@ -174,7 +174,7 @@ public final class EnemyTypes
     public static class Bomb extends Monster {
         private SetCallback mod;
         private int[] borders;
-        private static final int PIECES = 70;
+        private static final int PIECES = 50;
         private boolean existant = true;
         
         public Color getColor() {
@@ -190,9 +190,9 @@ public final class EnemyTypes
         public void move(int mx, int my) {
             if(existant) {
                 super.move(mx, my);
-                if(distanceFrom(mx, my) < 10000) {
+                if(distanceFrom(mx, my) < 60000) {
                     for (int i = 0; i < PIECES; i++) {
-                        Enemy e = new EnemyTypes.Random (x, y, speed, borders) {
+                        Enemy e = new EnemyTypes.Random (x, y, speed*3, borders) {
                             public boolean isMortal() {
                                 return true;
                             }
