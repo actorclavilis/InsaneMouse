@@ -434,6 +434,25 @@ public class GUI extends JPanel implements MouseMotionListener, ActionListener, 
         spawnRainB = false; 
     }
            
+    private class scbClass implements util.SetCallback {
+        public void add(Object o) {
+            enemies.add(o);
+        }
+    }
+    private scbClass scbInstance = new scbClass();
+    private void spawnBomb() {
+        float x,y;
+        if(Math.random() > .5) { //top/bottom
+            y = (Math.random()>.5)? 0: height;
+            x = (float)Math.random()*width;
+        }
+        else {
+            x = (Math.random()>.5)? 0: width;
+            y = (float)Math.random()*height;
+        }
+        enemies.add(new EnemyTypes.Bomb(x, y, 4, borders, scbInstance));
+    }
+    
     private void animate()
     {
         r = new Thread() 
