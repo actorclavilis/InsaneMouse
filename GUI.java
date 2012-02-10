@@ -1,16 +1,12 @@
 
+import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
-import java.awt.image.BufferedImage;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Set;
-import javax.swing.JButton;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-import javax.swing.SwingUtilities;
+import java.awt.image.*;
 import enemies.*;
-
 
 public class GUI extends JPanel implements MouseMotionListener, ActionListener, KeyEventDispatcher
 {
