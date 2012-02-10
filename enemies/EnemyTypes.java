@@ -1,79 +1,90 @@
-package enemies;
-
+package insanity;
 
 import javax.swing.*;
 import java.awt.*;
 
-public final class EnemyTypes {
-
-    private EnemyTypes() {
+public final class EnemyTypes 
+{
+    private EnemyTypes() 
+    {
     }
 
-    public static class Circle extends Enemy {
-
+    public static class Circle extends Enemy 
+    {
         protected float invSpeed = 30000;
 
-        public Color getColor() {
+        public Color getColor() 
+        {
             return Color.RED;
         }
 
-        public Circle(float _x, float _y, float _invSpeed) {
+        public Circle(float _x, float _y, float _invSpeed) 
+        {
             super(_x, _y);
             invSpeed = _invSpeed;
         }
 
-        public void move(int mx, int my) {
+        public void move(int mx, int my) 
+        {
             int directionX = 1;
             int directionY = 1;
             float p1 = (my - 5) - y;
             float p2 = (mx - 5) - x;
 
-            if (p1 < 0) {
+            if(p1 < 0) 
+            {
                 directionY = -1;
             }
-            if (p2 < 0) {
+            
+            if(p2 < 0) 
+            {
                 directionX = -1;
             }
 
             float angle = (float) Math.atan(p1 / p2);
-            float x = (float) Math.pow(p2, 2) + (float) Math.pow(p1, 2);
-            float deltaD = x / invSpeed;
+            float dx = (float)Math.pow(p2, 2) + (float)Math.pow(p1, 2);
+            float deltaD = dx/invSpeed;
             float deltaX = deltaD * (float) Math.abs(Math.cos(angle)) * directionX;
             float deltaY = deltaD * (float) Math.abs(Math.sin(angle)) * directionY;
 
             x += deltaX;
             y += deltaY;
-
         }
 
-        public boolean isMortal() {
+        public boolean isMortal() 
+        {
             return true;
         }
     }
 
-    public static class Monster extends Enemy {
-
+    public static class Monster extends Enemy 
+    {
         protected float speed = 8;
 
-        public Color getColor() {
+        public Color getColor() 
+        {
             return Color.MAGENTA.darker();
         }
 
-        public Monster(float _x, float _y, float _speed) {
+        public Monster(float _x, float _y, float _speed) 
+        {
             super(_x, _y);
             speed = _speed;
         }
 
-        public void move(int mx, int my) {
+        public void move(int mx, int my) 
+        {
             int directionX = 1;
             int directionY = 1;
             float p1 = (my - 5) - y;
             float p2 = (mx - 5) - x;
 
-            if (p1 < 0) {
+            if(p1 < 0) 
+            {
                 directionY = -1;
             }
-            if (p2 < 0) {
+            if(p2 < 0) 
+            {
                 directionX = -1;
             }
 
@@ -86,16 +97,18 @@ public final class EnemyTypes {
         }
     }
 
-    public static class Random extends Enemy {
-
+    public static class Random extends Enemy 
+    {
         private float vx, vy;
         private Rectangle bbox;
 
-        public Color getColor() {
+        public Color getColor() 
+        {
             return Color.GREEN;
         }
 
-        public Random(float _x, float _y, float _speed, Rectangle _bbox) {
+        public Random(float _x, float _y, float _speed, Rectangle _bbox) 
+        {
             super(_x, _y);
             double ang = Math.random() * Math.PI;
             vx = _speed * (float) Math.abs(Math.cos(ang));
@@ -103,39 +116,51 @@ public final class EnemyTypes {
             bbox = _bbox;
         }
 
-        public Random(int _x, int _y) {
+        public Random(int _x, int _y) 
+        {
             this(_x, _y, 4, new Rectangle(0, 0, 0, 0));
         }
 
-        public void move(int mx, int my) {
+        public void move(int mx, int my)
+        {
             x += vx;
             y += vy;
-            if (x > bbox.getMaxX() || x < bbox.getMinX())
+            
+            if(x > bbox.getMaxX() || x < bbox.getMinX())
+            {
                 vx *= -1;
+            }
+            
             if (y > bbox.getMaxY() || y < bbox.getMinY())
+            {
                 vy *= -1;
+            }
         }
     }
 
-    public static class Rain extends Enemy {
-
+    public static class Rain extends Enemy 
+    {
         private float vx, vy;
 
-        public Color getColor() {
+        public Color getColor() 
+        {
             return Color.YELLOW;
         }
 
-        public Rain(float _x, float _y, float _speed) {
+        public Rain(float _x, float _y, float _speed) 
+        {
             super(_x, _y);
             vx = -_speed;
             vy = _speed;
         }
 
-        public Rain(int _x, int _y) {
-            this(_x, _y, 2.4f);
+        public Rain(int _x, int _y) 
+        {
+            this(_x, _y, (float)2.4);
         }
 
-        public void move(int mx, int my) {
+        public void move(int mx, int my) 
+        {
             x += vx;
             y += vy;
         }

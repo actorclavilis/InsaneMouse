@@ -1,11 +1,12 @@
+package insanity;
 
 import java.awt.Dimension;
 import java.awt.Toolkit;
 import javax.swing.JFrame;
 
-public class InsaneMouse
-{ 
-    public static void main(String[] Args) throws Exception
+public class Insanity 
+{
+    public static void main(String[] args) throws Exception
     {
         Dimension d = Toolkit.getDefaultToolkit().getScreenSize();
         GUI gui = new GUI(d);
@@ -15,5 +16,5 @@ public class InsaneMouse
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setVisible(true);
         frame.getContentPane().add(gui);
-    }       
+    }
 }
