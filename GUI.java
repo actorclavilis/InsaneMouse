@@ -21,7 +21,7 @@ public class GUI extends JPanel implements MouseMotionListener, ActionListener, 
     private int multiplier,highscore, score, level;
     private int invSpeed, defaultDistance, width, height, timeDifficulty1, timeDifficulty2, distanceLimit;
     
-    private long startTime, timeElapse, timeLast, timeIncrease1, timeIncrease2;
+    private long startTime, timeElapse, timeLast, timeCircle, timeRain;
     
     private boolean countdownF, spawnCircleB, spawnMonsterB, spawnRandomersB, spawnRainB;
     private boolean circular, spawnIncrease, collision;
@@ -207,8 +207,8 @@ public class GUI extends JPanel implements MouseMotionListener, ActionListener, 
         timeLast = 0;        
         score = 0;        
         counterN = 10;
-        timeIncrease1 = 0;
-        timeIncrease2 = 0;
+        timeCircle = 0;
+        timeRain = 0;
                       
         countdownF = true;
         circular = true;
@@ -243,46 +243,46 @@ public class GUI extends JPanel implements MouseMotionListener, ActionListener, 
         {
             case 1:                              
                 distance = 600;
-                monsterN = 20;
-                randomN = 50;
-                rainN = 20;
+                monsterN = 0;
+                randomN = 0;
+                rainN = 40;
                 defaultDistance = 600;
-                timeLast = 2000000;
-                spawnCircleB = true;    
+                timeLast = 10000;
+                spawnCircleB = false;    
                 break;
             case 2:
-                distance = 500;
-                monsterN = 20;
-                randomN = 20;
-                rainN = 30;
-                defaultDistance = 500;
-                timeLast += 20000;
-                spawnCircleB = true;
+                distance = 600;
+                monsterN = 0;
+                randomN = 40;
+                rainN = 0;
+                defaultDistance = 600;
+                timeLast += 10000;
+                spawnCircleB = false;
                 break;
             case 3:
+                distance = 600;
+                monsterN = 40;
+                randomN = 0;
+                rainN = 0;
+                defaultDistance = 600;
+                timeLast += 10000;
+                spawnCircleB = false;
+                break;
+            case 4:
+                distance = 400;
+                monsterN = 20;
+                randomN = 0;
+                rainN = 0;
+                defaultDistance = 400;
+                spawnCircleB = true;
+                timeLast += 10000;
+                break;
+            case 5:
                 distance = 400;
                 monsterN = 20;
                 randomN = 20;
-                rainN = 30;
+                rainN = 20;
                 defaultDistance = 400;
-                timeLast += 20000;
-                spawnCircleB = true;
-                break;
-            case 4:
-                distance = 300;
-                monsterN = 20;
-                randomN = 20;
-                rainN = 30;
-                defaultDistance = 300;
-                spawnCircleB = true;
-                timeLast += 20000;
-                break;
-            case 5:
-                distance = 300;
-                monsterN = 10;
-                randomN = 25;
-                rainN = 40;
-                defaultDistance = 300;
                 spawnCircleB = true;
                 timeLast += 50000000;
                 level = 1;
@@ -482,17 +482,17 @@ public class GUI extends JPanel implements MouseMotionListener, ActionListener, 
                         
                         timeElapse = 1+System.currentTimeMillis()-startTime;                         
                         
-                        if(timeElapse > timeIncrease1)
+                        if(timeElapse > timeCircle)
                         {
-                            timeIncrease1 = timeElapse + timeDifficulty1;
+                            timeCircle = timeElapse + timeDifficulty1;
                             ballN++;
                             distance++;
                             spawnIncrease = true;
                         }
                         
-                        if(timeElapse > timeIncrease2)
+                        if(timeElapse > timeRain)
                         {
-                            timeIncrease2 = timeElapse + timeDifficulty2;
+                            timeRain = timeElapse + timeDifficulty2;
                             spawnRainB = true;
                         }
                         score = (int)timeElapse*multiplier;
