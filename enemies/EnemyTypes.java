@@ -128,14 +128,21 @@ public final class EnemyTypes
 
         public void move(int mx, int my)
         {     
-            if((x > borders[2])||(x < borders[0]))
+            if(x > borders[2])
             {                
-                vx *= -1;
+                vx = Math.abs(vx)*-1;
             }
-            
-            if ((y > borders[3])||(y < borders[1]))
+            if(x < borders[0])
+            {
+            	vx = Math.abs(vx);
+            }
+            if(y > borders[3])
             {                
-                vy *= -1;
+                vy = Math.abs(vy)*-1;
+            }
+            if(y < borders[1])
+            {
+            	vy = Math.abs(vy);
             }
             
             x += vx;

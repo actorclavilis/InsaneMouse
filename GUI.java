@@ -241,14 +241,14 @@ public class GUI extends JPanel implements MouseMotionListener, ActionListener, 
         
         switch(level)
         {
-            case 1:                              
+            case 1:                      //CHANGED FOR TESTING        
                 distance = 600;
-                monsterN = 20;
-                randomN = 5;
-                rainN = 30;
+                monsterN = 0;
+                randomN = 50;
+                rainN = 0;
                 defaultDistance = 600;
                 timeLast = 2000000;
-                spawnCircleB = true;
+                spawnCircleB = false;    
                 break;
             case 2:
                 distance = 500;
@@ -291,10 +291,10 @@ public class GUI extends JPanel implements MouseMotionListener, ActionListener, 
            
         monsterN *= monsterMultiplier;
         randomN *= monsterMultiplier;
-        spawnMonsterB = true;    
+        spawnMonsterB = false;    
         spawnRandomersB = true;
-        spawnIncrease = true;
-        spawnRainB = true;
+        spawnIncrease = false;
+        spawnRainB = false;
     }
                   
     private void drawLayout(Graphics g)
@@ -439,8 +439,11 @@ public class GUI extends JPanel implements MouseMotionListener, ActionListener, 
             enemies.add(o);
         }
     }
+    
     private scbClass scbInstance = new scbClass();
-    private void spawnBomb() {
+    
+    private void spawnBomb()                           //CHANGED
+    {
         float x,y;
         if(Math.random() > .5) { //top/bottom
             y = (Math.random()>.5)? 0: height;
@@ -450,7 +453,7 @@ public class GUI extends JPanel implements MouseMotionListener, ActionListener, 
             x = (Math.random()>.5)? 0: width;
             y = (float)Math.random()*height;
         }
-        enemies.add(new EnemyTypes.Bomb(x, y, 1f, borders, scbInstance));
+        //enemies.add(new EnemyTypes.Bomb(x, y, 1f, borders, scbInstance));
     }
     
     int iter = 0;
@@ -600,8 +603,6 @@ public class GUI extends JPanel implements MouseMotionListener, ActionListener, 
                 spawnRain();
             }
             
-            //g.drawString(Integer.toString(mouseX1),mouseX1,mouseY1);
-            //g.drawString(Integer.toString(mouseY1),mouseX1,mouseY1+15);
             Iterator i = enemies.iterator();
             while(i.hasNext()) 
             {
