@@ -2,6 +2,8 @@ package enemies;
 
 import javax.swing.*;
 import java.awt.*;
+import java.util.Set;
+import util.SetCallback;
 
 public final class EnemyTypes 
 {
@@ -164,6 +166,51 @@ public final class EnemyTypes
         {
             x += vx;
             y += vy;
+        }
+    }
+    
+    public static class Bomb extends Monster {
+        private SetCallback mod;
+        private int[] borders;
+        private static final int PIECES = 40;
+        private boolean existant = true;
+        
+        public Color getColor() {
+            return Color.BLUE;
+        }
+        
+        public Bomb (float _x, float _y, float _speed, int[] _borders, SetCallback _mod) {
+            super(_x, _y, _speed);
+            mod = _mod;
+            borders = _borders;
+        }
+        
+        public void move(int mx, int my) {
+            super.move(mx, my);
+            if(distanceFrom(mx, my) < 40) {
+                for (int i = 0; i < PIECES; i++) {
+                    Enemy e = new EnemyTypes.Random (x, y, speed, borders) {
+                        public boolean isMortal() {
+                            return true;
+                        }
+                    };
+                    mod.add(e);
+                }
+                existant = false;
+            }
+        }
+        
+        public boolean isMortal() {
+            return existant;
+        }
+        
+        public void paint(Graphics g) {
+            if(existant)
+                super.paint(g);
+        }
+        
+        public boolean collidesWith(int mx, int my) {
+            return existant && super.collidesWith(mx, my);
         }
     }
 }
