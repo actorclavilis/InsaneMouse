@@ -20,6 +20,7 @@ public class GUI extends JPanel implements MouseMotionListener, ActionListener, 
     private int mouseX1, mouseY1, mouseX2, mouseY2, mouseSpeed;
     private int multiplier,highscore, score, level;
     private int invSpeed, defaultDistance, width, height, timeDifficulty1, timeDifficulty2, distanceLimit;
+    private int lives;
     
     private long startTime, timeElapse, timeLast, timeCircle, timeRain;
     
@@ -209,6 +210,7 @@ public class GUI extends JPanel implements MouseMotionListener, ActionListener, 
         counterN = 10;
         timeCircle = 0;
         timeRain = 0;
+        lives = 3;
                       
         countdownF = true;
         circular = true;
@@ -315,8 +317,15 @@ public class GUI extends JPanel implements MouseMotionListener, ActionListener, 
         
         if(collision)
         {
+        	g.drawString(String.valueOf(lives), width/2-20, height/2-40);
+        	lives--;
+        	collision = false;
+        }
+        
+        if(lives == 0)
+        {
             g.setColor(Color.red.darker());
-            g.drawString("GAME OVER", width/2-20, height/2);
+            g.drawString("GAME OVER", width/2-20, height/2);          
         }
     }
        
@@ -470,7 +479,7 @@ public class GUI extends JPanel implements MouseMotionListener, ActionListener, 
                     {
                         countdown();
                         
-                        if(collision)
+                        if(lives == 0)
                         {                       
                             if(highscore < score)
                             {
