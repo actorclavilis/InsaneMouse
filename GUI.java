@@ -19,13 +19,12 @@ public class GUI extends JPanel implements ActionListener, EnemyDeletable
     private JButton easy, hard, back;
     private JLabel highscoreL;
     
-    private int ballN, monsterN, counterN, randomN, rainN, monsterMultiplier;
+    private int ballN, monsterN, counterN, randomN, rainN, bombN, monsterMultiplier;
     private int multiplier,highscore, score, level;
     private int invSpeed, defaultDistance, width, height, timeDifficulty1, distanceLimit;
     private int[] borders;
     
-    private long startTime, timeElapse, timeLast, timeCircle, programLoopCounter;
-    private long shrapnelLifetime = 3000;
+    private long startTime, timeElapse, timeLast, timeCircle, timeCircleSwitch, programLoopCounter;
     
     private boolean countdownF, spawnCircleB, spawnMonsterB, spawnRandomersB, spawnRainB;
     private boolean circular, spawnIncrease, onePlayerAlive;
@@ -138,6 +137,7 @@ public class GUI extends JPanel implements ActionListener, EnemyDeletable
         score = 0;        
         counterN = 10;
         timeCircle = 0;
+        timeCircleSwitch = 0;
         programLoopCounter = 1;
         programSpeedAdjust = 1;
         
@@ -178,17 +178,17 @@ public class GUI extends JPanel implements ActionListener, EnemyDeletable
                 randomN = 0;
                 rainN = 40;
                 defaultDistance = 600;
-                timeLast = 10000;
-                spawnCircleB = false;    
+                timeLast = 20000;
+                spawnCircleB = true;    
                 break;
             case 2:
                 distance = 600;
                 monsterN = 0;
                 randomN = 40;
-                rainN = 0;
+                rainN = 10;
                 defaultDistance = 600;
-                timeLast += 10000;
-                spawnCircleB = false;
+                timeLast += 20000;
+                spawnCircleB = true;
                 break;
             case 3:
                 distance = 600;
@@ -196,22 +196,22 @@ public class GUI extends JPanel implements ActionListener, EnemyDeletable
                 randomN = 0;
                 rainN = 0;
                 defaultDistance = 600;
-                timeLast += 10000;
-                spawnCircleB = false;
+                timeLast += 20000;
+                spawnCircleB = true;
                 break;
             case 4:
                 distance = 400;
-                monsterN = 20;
-                randomN = 0;
+                monsterN = 10;
+                randomN = 10;
                 rainN = 0;
                 defaultDistance = 400;
                 spawnCircleB = true;
-                timeLast += 10000;
+                timeLast += 20000;
                 break;
             case 5:
                 distance = 400;
-                monsterN = 20;
-                randomN = 20;
+                monsterN = 15;
+                randomN = 15;
                 rainN = 20;
                 defaultDistance = 400;
                 spawnCircleB = true;
@@ -219,7 +219,7 @@ public class GUI extends JPanel implements ActionListener, EnemyDeletable
                 level = 1;
                 break;
         }    
-           
+          
         monsterN *= monsterMultiplier;
         randomN *= monsterMultiplier;
         spawnMonsterB = true;    
@@ -397,19 +397,42 @@ public class GUI extends JPanel implements ActionListener, EnemyDeletable
             enemies.add(o);
         }
     }
-           
+    
+    private boolean spawnBombB()
+    {
+        boolean bombPartsExist = false;
+        try
+        {
+            Iterator i = enemies.iterator();
+            while (i.hasNext()) 
+            {
+                Enemy e = (Enemy) i.next();
+                if(e.getClass().equals(EnemyTypes.Bomb.class)||(e.getClass().equals(EnemyTypes.Shrapnel.class)))
+                {
+                    bombPartsExist = true;
+                    break;
+                }
+            }
+        }catch(Exception e)
+        {}
+        return !bombPartsExist;
+    }
+    
     private void spawnBomb()                           
     {
         float x,y;
-        if(Math.random() > .5) { //top/bottom
-            y = (Math.random()>.5)? borders[1]: borders[3];
-            x = (float)Math.random()*borders[2]-borders[0]; //width
+        for(int i = 0; i < bombN; i++)
+        {
+            if(Math.random() > .5) { //top/bottom
+                y = (Math.random()>.5)? borders[1]: borders[3];
+                x = (float)Math.random()*borders[2]-borders[0]; //width
+            }
+            else {
+                x = (Math.random()>.5)? borders[0]: borders[2];
+                y = (float)Math.random()*borders[3]-borders[1]; //height
+            } 
+            enemies.add(new EnemyTypes.Bomb(x, y, 1f, borders, scbInstance));
         }
-        else {
-            x = (Math.random()>.5)? borders[0]: borders[2];
-            y = (float)Math.random()*borders[3]-borders[1]; //height
-        }
-       enemies.add(new EnemyTypes.Bomb(x, y, 1f, borders, scbInstance));
     }
     
     int iter = 0;
@@ -443,7 +466,7 @@ public class GUI extends JPanel implements ActionListener, EnemyDeletable
                             programSpeedAdjust = (0.3f)/loopPerSec;
                         }
                                                
-                        if(timeElapse > timeCircle)
+                        if((timeElapse > timeCircle)&&(ballN < 20))
                         {
                             timeCircle = timeElapse + timeDifficulty1;
                             ballN++;
@@ -459,15 +482,15 @@ public class GUI extends JPanel implements ActionListener, EnemyDeletable
                             levelSetup();
                         }                       
                         
-                        if(ballN > 25)
+                        if(timeElapse > timeCircleSwitch)
                         {
+                            timeCircleSwitch = timeElapse + 10000;
                             deleteIf(new EnemyPredicate() {
                                 public boolean satisfiedBy(Enemy e) {
                                     return e.getClass().equals(EnemyTypes.Circle.class);
                                 }
                             });
-                            spawnBomb();
-                            if(iter++%3==0)
+                            if(iter++%2==0)
                             {
                             	spawnMonsters();
                             }
@@ -475,11 +498,18 @@ public class GUI extends JPanel implements ActionListener, EnemyDeletable
                             distance = defaultDistance;
                             circular = !circular;                           
                         }
-                        
+                                              
                         deleteIf(new EnemyPredicate() {
                             public boolean satisfiedBy(Enemy e) {
                                 return e.getClass().equals(EnemyTypes.Shrapnel.class)
-                                    && (System.currentTimeMillis() - ((EnemyTypes.Shrapnel)e).getBorn() > shrapnelLifetime);
+                                    &&(((EnemyTypes.Shrapnel)e).getBounces() > 1);
+                            }
+                        });
+                        
+                        deleteIf(new EnemyPredicate() {
+                            public boolean satisfiedBy(Enemy e) {
+                                return e.getClass().equals(EnemyTypes.Bomb.class)
+                                    &&(((EnemyTypes.Bomb)e).isMortal());
                             }
                         });
                         
@@ -509,15 +539,15 @@ public class GUI extends JPanel implements ActionListener, EnemyDeletable
     public void deleteIf(EnemyPredicate p) {
         try
         {
-        Set newEnemies = new HashSet(enemies.size());
-        Iterator i = enemies.iterator();
-        while (i.hasNext()) {
-            Enemy e = (Enemy) i.next();
-            if (!p.satisfiedBy(e)) {
-                newEnemies.add(e);
+            Set newEnemies = new HashSet(enemies.size());
+            Iterator i = enemies.iterator();
+            while (i.hasNext()) {
+                Enemy e = (Enemy) i.next();
+                if (!p.satisfiedBy(e)) {
+                    newEnemies.add(e);
+                }
             }
-        }
-        enemies = newEnemies;
+            enemies = newEnemies;
         }catch(Exception e)
         {}
     }
@@ -596,21 +626,30 @@ public class GUI extends JPanel implements ActionListener, EnemyDeletable
             {
                 spawnRain();
             }
-            
-            Iterator i = enemies.iterator();
-            while(i.hasNext()) 
+            if(spawnBombB())
             {
-                Enemy e = (Enemy)i.next();
-                Iterator j = players.iterator();
-                while(j.hasNext()) {
-                    Player p = (Player)j.next();
-                    e.move(p.getX(), p.getY(), programSpeedAdjust/*/players.size()*/);
-                    if((e.collidesWith(p.getX(), p.getY()))&&(!p.getImmunity())) {
-                        p.decLives(p.getX(), p.getY());
-                        p.setImmunity(true);
+                spawnBomb();
+            }
+            
+            try
+            {
+                Iterator i = enemies.iterator();
+                while(i.hasNext()) 
+                {
+                    Enemy e = (Enemy)i.next();
+                    Iterator j = players.iterator();
+                    while(j.hasNext()) {
+                        Player p = (Player)j.next();
+                        e.move(p.getX(), p.getY(), programSpeedAdjust/*/players.size()*/);
+                        if((e.collidesWith(p.getX(), p.getY()))&&(!p.getImmunity())) {
+                            p.decLives(p.getX(), p.getY());
+                            p.setImmunity(true);
+                        }
                     }
+                    e.paint(g);
                 }
-                e.paint(g);
+            }catch(Exception e)
+            {               
             }
             
         }     
@@ -621,8 +660,9 @@ public class GUI extends JPanel implements ActionListener, EnemyDeletable
     {
         if(e.getSource() == easy)
         {          
-            invSpeed = 30000;
-            timeDifficulty1 = 100;
+            invSpeed = 50000;
+            bombN = 1;
+            timeDifficulty1 = 1000;
             distanceLimit = 400;
             monsterMultiplier = 1;
             multiplier = 1;
@@ -630,8 +670,9 @@ public class GUI extends JPanel implements ActionListener, EnemyDeletable
         }
         else if(e.getSource() == hard)
         {
-            invSpeed = 10000;
-            timeDifficulty1 = 100;
+            invSpeed = 30000;
+            bombN = 4;
+            timeDifficulty1 = 500;
             distanceLimit = 200;
             monsterMultiplier = 2;
             multiplier = 2;       

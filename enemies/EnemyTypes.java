@@ -102,7 +102,8 @@ public final class EnemyTypes
     public static class Random extends Enemy 
     {
         private float vx, vy;
-        int[] borders;
+        private int[] borders;
+        private int bounces = 0;
 
         public Color getColor() 
         {
@@ -131,22 +132,31 @@ public final class EnemyTypes
             if(x > borders[2])
             {                
                 vx = Math.abs(vx)*-1;
+                bounces++;
             }
             if(x < borders[0])
             {
             	vx = Math.abs(vx);
+                bounces++;
             }
             if(y > borders[3])
             {                
                 vy = Math.abs(vy)*-1;
+                bounces++;
             }
             if(y < borders[1])
             {
             	vy = Math.abs(vy);
+                bounces++;
             }
             
             x += vx*speedAdjust;
             y += vy*speedAdjust;
+        }
+        
+        public int getBounces()
+        {
+            return bounces;
         }
     }
 
@@ -159,7 +169,7 @@ public final class EnemyTypes
         {
             return Color.YELLOW;
         }
-
+        
         public Rain(float _x, float _y, float _speed, int _floor) 
         {
             super(_x, _y);
@@ -228,7 +238,6 @@ public final class EnemyTypes
     }
     
     public static class Shrapnel extends Random {
-        private long ctmBorn = System.currentTimeMillis();
         
         public Shrapnel(float _x, float _y, float _speed, int[] _borders) {
             super(_x, _y, _speed, _borders);
@@ -236,10 +245,6 @@ public final class EnemyTypes
         
         public Color getColor() {
             return Color.CYAN;
-        }
-        
-        public long getBorn() {
-            return ctmBorn;
-        }
+        }         
     }
 }
