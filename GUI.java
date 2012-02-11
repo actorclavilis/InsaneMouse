@@ -16,15 +16,15 @@ public class GUI extends JPanel implements ActionListener
     private Dimension d; 
       
     private JPanel menu;
-    private JButton easy, normal, insane, back;
+    private JButton easy, hard, back;
     private JLabel highscoreL;
     
     private int ballN, monsterN, counterN, randomN, rainN, monsterMultiplier;
     private int multiplier,highscore, score, level;
-    private int invSpeed, defaultDistance, width, height, timeDifficulty1, timeDifficulty2, distanceLimit;
+    private int invSpeed, defaultDistance, width, height, timeDifficulty1, distanceLimit;
     private int[] borders;
     
-    private long startTime, timeElapse, timeLast, timeCircle, timeRain, programLoopCounter;
+    private long startTime, timeElapse, timeLast, timeCircle, programLoopCounter;
     private long shrapnelLifetime = 3000;
     
     private boolean countdownF, spawnCircleB, spawnMonsterB, spawnRandomersB, spawnRainB;
@@ -89,22 +89,18 @@ public class GUI extends JPanel implements ActionListener
         highscoreL.setForeground(Color.white);
         
         easy = new JButton("Easy");
-        normal = new JButton("Normal");
-        insane = new JButton("Insane");
+        hard = new JButton("Hard");
         
         easy.addActionListener(this);
-        normal.addActionListener(this);
-        insane.addActionListener(this);
+        hard.addActionListener(this);
         
         easy.setBounds((width/2)-50, (height/2)-50, 100, 20);
-        normal.setBounds((width/2)-50, height/2, 100, 20);
-        insane.setBounds((width/2)-50, (height/2)+50, 100, 20);
+        hard.setBounds((width/2)-50, height/2, 100, 20);
         
         menu.add(title);
         menu.add(author);
         menu.add(easy);
-        menu.add(normal);
-        menu.add(insane);
+        menu.add(hard);
         menu.add(highscoreL);
         
         back = new JButton("Back");
@@ -139,7 +135,6 @@ public class GUI extends JPanel implements ActionListener
         score = 0;        
         counterN = 10;
         timeCircle = 0;
-        timeRain = 0;
         programLoopCounter = 1;
         programSpeedAdjust = 1;
         
@@ -387,7 +382,7 @@ public class GUI extends JPanel implements ActionListener
         {
             float x = (i*2*width)/rainN;
             float y = 0;
-            enemies.add(new EnemyTypes.Rain(x, y, 4));
+            enemies.add(new EnemyTypes.Rain(x, y, 4, height));
         }        
         spawnRainB = false; 
     }
@@ -453,11 +448,6 @@ public class GUI extends JPanel implements ActionListener
                             spawnIncrease = true;
                         }
                         
-                        if(timeElapse > timeRain)
-                        {
-                            timeRain = timeElapse + timeDifficulty2;
-                            spawnRainB = true;
-                        }
                         score = (int)timeElapse*multiplier;
                         
                         if(timeElapse > timeLast)
@@ -609,7 +599,7 @@ public class GUI extends JPanel implements ActionListener
                 while(j.hasNext()) {
                     Player p = (Player)j.next();
                     e.move(p.getX(), p.getY(), programSpeedAdjust/*/players.size()*/);
-                    if((e.collidesWith(p.getX()+5, p.getY()+5))&&(!p.getImmunity())) {
+                    if((e.collidesWith(p.getX(), p.getY()))&&(!p.getImmunity())) {
                         p.decLives(p.getX(), p.getY());
                         p.setImmunity(true);
                     }
@@ -627,30 +617,18 @@ public class GUI extends JPanel implements ActionListener
         {          
             invSpeed = 30000;
             timeDifficulty1 = 100;
-            timeDifficulty2 = 4000;
             distanceLimit = 400;
             monsterMultiplier = 1;
             multiplier = 1;
             setup();
         }
-        else if(e.getSource() == normal)
-        {
-            invSpeed = 20000;
-            timeDifficulty1 = 300;
-            timeDifficulty2 = 4000;
-            distanceLimit = 300;
-            monsterMultiplier = 5;
-            multiplier = 5;
-            setup();
-        }
-        else if(e.getSource() == insane)
+        else if(e.getSource() == hard)
         {
             invSpeed = 10000;
             timeDifficulty1 = 100;
-            timeDifficulty2 = 4000;
             distanceLimit = 200;
-            monsterMultiplier = 15;
-            multiplier = 15;       
+            monsterMultiplier = 2;
+            multiplier = 2;       
             setup();
         }
         else if(e.getSource() == back)
