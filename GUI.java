@@ -27,7 +27,7 @@ public class GUI extends JPanel implements MouseMotionListener, ActionListener, 
     private long shrapnelLifetime = 3000;
     
     private boolean countdownF, spawnCircleB, spawnMonsterB, spawnRandomersB, spawnRainB;
-    private boolean circular, spawnIncrease, collision;
+    private boolean circular, spawnIncrease;
     private boolean up1, down1, left1, right1, up2, down2, left2, right2;
     
     private float distance, programSpeedAdjust;
@@ -222,8 +222,7 @@ public class GUI extends JPanel implements MouseMotionListener, ActionListener, 
         spawnIncrease = true;
         spawnCircleB = false;  
         spawnMonsterB = false;
-        spawnRandomersB = false;
-        collision = false;    
+        spawnRandomersB = false;   
                         
         levelSetup();
         countdown();
@@ -312,18 +311,25 @@ public class GUI extends JPanel implements MouseMotionListener, ActionListener, 
         borders[2] = width-20;
         borders[3] = height-20;
         
-        if(player[0].X < borders[0] || player[0].Y < borders[1] || player[0].X > borders[2] || player[0].Y > borders[3])
+        for(int i = 0; i < 2; i++)
         {
-            if(!countdownF)
+            if(player[i].isActive)
             {
-                collision = true;
+                if(player[i].X < borders[0] || player[i].Y < borders[1] || player[i].X > borders[2] || player[i].Y > borders[3])
+                {
+                    if(!countdownF)
+                    {
+                        player[i].lives--;
+                        player[i].respawn = true;
+                    }
+                }
             }
-        } 
+        }
         
-        if(collision)
+        if(((player[0].lives == 0)&&(player[1].lives == 0))||((player[0].lives == 0)&&(!player[1].isActive)))
         {
             g.setColor(Color.red.darker());
-            g.drawString("GAME OVER", width/2-20, height/2);          
+            g.drawString("GAME OVER", width/2-20, height/2);     
         }
     }
        
@@ -475,8 +481,8 @@ public class GUI extends JPanel implements MouseMotionListener, ActionListener, 
                     {
                         countdown();
                         
-                        if(collision)
-                        {                       
+                        if(((player[0].lives == 0)&&(player[1].lives == 0))||((player[0].lives == 0)&&(!player[1].isActive)))
+                        {              
                             if(highscore < score)
                             {
                                 highscore = score;
@@ -635,9 +641,16 @@ public class GUI extends JPanel implements MouseMotionListener, ActionListener, 
                 e.move(player[0].X, player[0].Y, programSpeedAdjust);
                 e.paint(g);
                 
-                if(e.collidesWith(player[0].X, player[0].Y))
+                for(int x = 0; x < 2; x++)
                 {
-                	collision = true;
+                    if(player[x].isActive)
+                    {
+                        if(e.collidesWith(player[x].X, player[x].Y))
+                        {
+                            player[x].lives--;
+                            player[x].respawn = true;
+                        }
+                    }
                 }
             }
             

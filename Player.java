@@ -5,6 +5,7 @@ public class Player
     public boolean isActive;
     public int X = 0;
     public int Y = 0;
+    public boolean respawn = false;
        
     public Player(int numberOfLives, boolean startActive)
     {
