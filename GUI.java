@@ -20,7 +20,6 @@ public class GUI extends JPanel implements ActionListener
     private JLabel highscoreL;
     
     private int ballN, monsterN, counterN, randomN, rainN, monsterMultiplier;
-    private int mouseSpeed;
     private int multiplier,highscore, score, level;
     private int invSpeed, defaultDistance, width, height, timeDifficulty1, timeDifficulty2, distanceLimit;
     private int[] borders;
@@ -29,8 +28,7 @@ public class GUI extends JPanel implements ActionListener
     private long shrapnelLifetime = 3000;
     
     private boolean countdownF, spawnCircleB, spawnMonsterB, spawnRandomersB, spawnRainB;
-    private boolean circular, spawnIncrease, collision;
-    private boolean up1, down1, left1, right1, up2, down2, left2, right2;
+    private boolean circular, spawnIncrease, onePlayerAlive;
     
     private float distance, programSpeedAdjust;
     
@@ -38,7 +36,6 @@ public class GUI extends JPanel implements ActionListener
     private java.util.List players;
     private Thread t, r;   
     private scbClass scbInstance = new scbClass();
-    private Player[] player;
     
     public GUI(Dimension a) throws Exception
     {                   
@@ -50,8 +47,7 @@ public class GUI extends JPanel implements ActionListener
         this.setFocusable(true);
         this.setVisible(true);
         
-        highscore = 0;
-        mouseSpeed = 1;             
+        highscore = 0;          
         width = this.getWidth();
         height = this.getHeight();
         
@@ -69,84 +65,7 @@ public class GUI extends JPanel implements ActionListener
         makeMenuScreen();
         this.add(menu);
     }  
-    
-    public boolean dispatchKeyEvent(KeyEvent e)
-    {
-    	if(e.getID() == KeyEvent.KEY_PRESSED)
-    	{  	
-            if(e.getKeyCode() == KeyEvent.VK_W)
-            {
-                up1 = true;    		
-            }
-            if(e.getKeyCode() == KeyEvent.VK_S)
-            {
-                down1 = true;
-            }
-            if(e.getKeyCode() == KeyEvent.VK_A)
-            {
-                left1 = true;
-            }
-            if(e.getKeyCode() == KeyEvent.VK_D)
-            {
-                right1 = true;
-            }
-            if(e.getKeyCode() == KeyEvent.VK_NUMPAD8)
-            {
-                up1 = true;    		
-            }
-            if(e.getKeyCode() == KeyEvent.VK_NUMPAD5)
-            {
-                down1 = true;
-            }
-            if(e.getKeyCode() == KeyEvent.VK_NUMPAD4)
-            {
-                left1 = true;
-            }
-            if(e.getKeyCode() == KeyEvent.VK_NUMPAD6)
-            {
-                right1 = true;
-            }
-        }
-	    
-        if(e.getID() == KeyEvent.KEY_RELEASED)
-        {	
-            if(e.getKeyCode() == KeyEvent.VK_W)
-            {
-                up1 = false;    		
-            }
-            if(e.getKeyCode() == KeyEvent.VK_S)
-            {
-                down1 = false;
-            }
-            if(e.getKeyCode() == KeyEvent.VK_A)
-            {
-                left1 = false;
-            }
-            if(e.getKeyCode() == KeyEvent.VK_D)
-            {
-                right1 = false;
-            }
-            if(e.getKeyCode() == KeyEvent.VK_NUMPAD8)
-            {
-                up1 = false;    		
-            }
-            if(e.getKeyCode() == KeyEvent.VK_NUMPAD5)
-            {
-                down1 = false;
-            }
-            if(e.getKeyCode() == KeyEvent.VK_NUMPAD4)
-            {
-                left1 = false;
-            }
-            if(e.getKeyCode() == KeyEvent.VK_NUMPAD6)
-            {
-                right1 = false;
-            }
-        }
-	    
-    	return false;
-    }
-    
+        
     private void makeMenuScreen()
     {     
         menu = new JPanel();
@@ -200,6 +119,14 @@ public class GUI extends JPanel implements ActionListener
         this.remove(menu);
         this.revalidate();
         
+        Iterator i = players.iterator();
+        Player p;
+        while(i.hasNext()) {
+            p = (Player)i.next();
+            p.resetLives(3);
+            p.setActive(true);
+        }
+        
         BufferedImage cursorImg = new BufferedImage(16, 16, BufferedImage.TYPE_INT_ARGB);
         Cursor blank = Toolkit.getDefaultToolkit().createCustomCursor(cursorImg, new Point(0,0), "BLANK");
         this.setCursor(blank);
@@ -215,7 +142,8 @@ public class GUI extends JPanel implements ActionListener
         timeRain = 0;
         programLoopCounter = 1;
         programSpeedAdjust = 1;
-                      
+        
+        onePlayerAlive = true;                      
         countdownF = true;
         circular = true;
         spawnIncrease = true;
@@ -320,7 +248,6 @@ public class GUI extends JPanel implements ActionListener
             if(p.getLives() <= 0) {
                 g.setColor(Color.red.darker());
                 g.drawString("GAME OVER", width/2-20, height/2);                
-                collision = true;
             }
         }
     }
@@ -477,7 +404,7 @@ public class GUI extends JPanel implements ActionListener
                     {
                         countdown();
                         
-                        if(collision)
+                        if(!onePlayerAlive)
                         {                       
                             if(highscore < score)
                             {
@@ -581,9 +508,19 @@ public class GUI extends JPanel implements ActionListener
     
     private void movePlayers()
     {
+        onePlayerAlive = false;
         Iterator i = players.iterator();
         while(i.hasNext()) {
-            ((Player)i.next()).move();
+            Player p = (Player)i.next();
+            if(p.getLives() == 0)
+            {
+                p.setActive(false);
+            }
+            if(p.isActive())
+            {
+                onePlayerAlive = true;
+                p.move();
+            }
         }
     }
     

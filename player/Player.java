@@ -28,6 +28,10 @@ public abstract class Player
         return lives;
     }
     
+    public void resetLives(int _lives) {
+        lives = _lives;
+    }
+    
     public void decLives(int _x, int _y) {
         lives--;
         x = _x; y = _y;
