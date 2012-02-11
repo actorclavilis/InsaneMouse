@@ -27,7 +27,7 @@ public abstract class Enemy
             return Color.WHITE;
 	}
 	
-	public abstract void move(int mx, int my, float speedAdjust);
+	public abstract void move(int mx, int my);
 	
 	protected float distanceFrom(float mx, float my) 
         {
