@@ -199,12 +199,7 @@ public final class EnemyTypes
                 super.move(mx, my);
                 if(distanceFrom(mx, my) < 10000) {
                     for (int i = 0; i < PIECES; i++) {
-                        Enemy e = new EnemyTypes.Random (x, y, speed*3, borders) {
-                            public boolean isMortal() {
-                                return true;
-                            }
-                        };
-                        mod.add(e);
+                        mod.add(new Shrapnel(x, y, speed, borders));
                     }
                     existant = false;
                 }
@@ -222,6 +217,22 @@ public final class EnemyTypes
         
         public boolean collidesWith(int mx, int my) {
             return existant && super.collidesWith(mx, my);
+        }
+    }
+    
+    public static class Shrapnel extends Random {
+        private long ctmBorn = System.currentTimeMillis();
+        
+        public Shrapnel(float _x, float _y, float _speed, int[] _borders) {
+            super(_x, _y, _speed, _borders);
+        }
+        
+        public Color getColor() {
+            return Color.CYAN;
+        }
+        
+        public long getBorn() {
+            return ctmBorn;
         }
     }
 }

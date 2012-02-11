@@ -25,6 +25,7 @@ public class GUI extends JPanel implements MouseMotionListener, ActionListener, 
     private int[] borders;
     
     private long startTime, timeElapse, systemSpeed, timeLast, timeCircle, timeRain;
+    private long shrapnelLifetime = 3000;
     
     private boolean countdownF, spawnCircleB, spawnMonsterB, spawnRandomersB, spawnRainB;
     private boolean circular, spawnIncrease, collision;
@@ -536,6 +537,13 @@ public class GUI extends JPanel implements MouseMotionListener, ActionListener, 
                             distance = defaultDistance;
                             circular = !circular;                           
                         }
+                        
+                        deleteIf(new EnemyPredicate() {
+                            public boolean satisfiedBy(Enemy e) {
+                                return e.getClass().equals(EnemyTypes.Shrapnel.class)
+                                    && (System.currentTimeMillis() - ((EnemyTypes.Shrapnel)e).getBorn() > shrapnelLifetime);
+                            }
+                        });
                     }
 
                     try
