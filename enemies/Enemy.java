@@ -29,7 +29,7 @@ public abstract class Enemy
 	
 	public abstract void move(int mx, int my, float speedAdjust);
 	
-	protected float distanceFrom(float mx, float my) 
+	protected float distanceFrom(float mx, float my)
         {
             float p1 = (x+5)-mx;
             float p2 = (y+5)-my;

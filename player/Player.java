@@ -1,19 +1,29 @@
 package player;
 
+import enemies.Enemy;
+import util.EnemyDeletable;
+import java.awt.*;
+import util.EnemyPredicate;
 
-public abstract class Player 
-{
+public abstract class Player {
+
+    private static final int SENBONSAKURA_RADIUS = 100, 
+            SENBONSAKURA_SQUARE = SENBONSAKURA_RADIUS*SENBONSAKURA_RADIUS;
     protected int lives;
     protected boolean isActive;
     protected int x;
     protected int y;
-       
-    public Player(int _x, int _y, int numberOfLives, boolean startActive)
-    {
+    protected EnemyDeletable parent;
+    private boolean senbonSakuraF = false;
+    private int senbonSakuraN;
+
+    public Player(int _x, int _y, int numberOfLives, boolean startActive, int numberOfSenbonsakura, EnemyDeletable _parent) {
         lives = numberOfLives;
         isActive = startActive;
         x = _x;
         y = _y;
+        parent = _parent;
+        senbonSakuraN = numberOfSenbonsakura;
     }
 
     public int getX() {
@@ -27,14 +37,15 @@ public abstract class Player
     public int getLives() {
         return lives;
     }
-    
+
     public void resetLives(int _lives) {
         lives = _lives;
     }
-    
+
     public void decLives(int _x, int _y) {
         lives--;
-        x = _x; y = _y;
+        x = _x;
+        y = _y;
     }
 
     public boolean isActive() {
@@ -44,6 +55,28 @@ public abstract class Player
     public void setActive(boolean isActive) {
         this.isActive = isActive;
     }
-    
+
     public abstract void move();
+
+    protected void senbonSakura() {
+        if (senbonSakuraN-- > 0) {
+            senbonSakuraF = true;
+        }
+    }
+
+    public void paint(Graphics g) {
+        g.setColor(Color.WHITE);
+        g.fillOval(x - 5, y - 5, 10, 10);
+        if (senbonSakuraF) {
+            g.fillOval(x, y, SENBONSAKURA_RADIUS, SENBONSAKURA_RADIUS);
+            parent.deleteIf(new EnemyPredicate() {
+                public boolean satisfiedBy(Enemy e) {
+                    float p1 = (x + 5) - e.getX();
+                    float p2 = (y + 5) - e.getY();
+                    return (p1*p1 + p2*p2) < SENBONSAKURA_SQUARE;
+                }
+            });
+            senbonSakuraF = false;
+        }
+    }
 }
