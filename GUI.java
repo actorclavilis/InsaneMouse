@@ -17,25 +17,24 @@ public class GUI extends JPanel implements MouseMotionListener, ActionListener, 
     private JLabel highscoreL;
     
     private int ballN, monsterN, counterN, randomN, rainN, monsterMultiplier;
-    private int mouseX1, mouseY1, mouseX2, mouseY2, mouseSpeed;
+    private int mouseSpeed;
     private int multiplier,highscore, score, level;
     private int invSpeed, defaultDistance, width, height, timeDifficulty1, timeDifficulty2, distanceLimit;
-    private int lives;
+
     private int[] borders;
     
-    private long startTime, timeElapse, systemSpeed, timeLast, timeCircle, timeRain;
+    private long startTime, timeElapse, timeLast, timeCircle, timeRain, programLoopCounter;
     
     private boolean countdownF, spawnCircleB, spawnMonsterB, spawnRandomersB, spawnRainB;
     private boolean circular, spawnIncrease, collision;
     private boolean up1, down1, left1, right1, up2, down2, left2, right2;
     
-    private float distance;
+    private float distance, programSpeedAdjust;
     
     private Set enemies;
-    			
     private Thread t, r;
-    
     private scbClass scbInstance = new scbClass();
+    private Player[] player;
     
     public GUI(Dimension a) throws Exception
     {                   
@@ -49,14 +48,20 @@ public class GUI extends JPanel implements MouseMotionListener, ActionListener, 
         this.setVisible(true);
         
         KeyboardFocusManager.getCurrentKeyboardFocusManager().addKeyEventDispatcher(this);
-                    
+        
+        player = new Player[2];
+        player[0] = new Player();
+        player[1] = new Player(false);
+        
         highscore = 0;
         mouseSpeed = 1;             
         width = this.getWidth();
         height = this.getHeight();    
-        System.out.println(height);
-        mouseX1 = width/2;
-        mouseY1 = (height+100)/2;
+        
+        player[0].X = width/2;
+        player[0].Y = (height+100)/2;
+        player[1].X = width/2;
+        player[1].Y = (height+100)/2;
 
         borders = new int[4];
         borders[0] = 15;
@@ -211,8 +216,8 @@ public class GUI extends JPanel implements MouseMotionListener, ActionListener, 
         counterN = 10;
         timeCircle = 0;
         timeRain = 0;
-        lives = 3;
-        systemSpeed = 0;
+        programSpeedAdjust = 1;
+        programLoopCounter = 1;
                       
         countdownF = true;
         circular = true;
@@ -309,22 +314,14 @@ public class GUI extends JPanel implements MouseMotionListener, ActionListener, 
         borders[2] = width-20;
         borders[3] = height-20;
         
-        if(mouseX1 < borders[0] || mouseY1 < borders[1] || mouseX1 > borders[2] || mouseY1 > borders[3])
+        if(player[0].X < borders[0] || player[0].Y < borders[1] || player[0].X > borders[2] || player[0].Y > borders[3])
         {
             if(!countdownF)
             {
                 collision = true;
             }
         } 
-        
-        /*
-        if(collision)
-        {
-        	g.drawString(String.valueOf(lives), width/2-20, height/2-40);
-        	lives--;
-        	collision = false;
-        }*/
-        
+             
         if(collision)
         {
             g.setColor(Color.red.darker());
@@ -368,8 +365,8 @@ public class GUI extends JPanel implements MouseMotionListener, ActionListener, 
             for(int i = 0; i < ballN; i++) 
             {
                 double degree = Math.random()*2*Math.PI;
-                float x = mouseX1 + distance * (float) Math.sin(degree * i);
-                float y = mouseY1 + distance * (float) Math.cos(degree * i);
+                float x = player[0].X + distance * (float) Math.sin(degree * i);
+                float y = player[0].Y + distance * (float) Math.cos(degree * i);
                 enemies.add(new EnemyTypes.Circle(x, y, invSpeed));
             }
         } 
@@ -398,13 +395,13 @@ public class GUI extends JPanel implements MouseMotionListener, ActionListener, 
         {
             float x = (float)Math.random()*width;
             float y = (float)Math.random()*height;          
-            float r = (float)Math.sqrt(Math.pow(mouseX1 - x, 2) + Math.pow(mouseY1 - y, 2));
+            float r = (float)Math.sqrt(Math.pow(player[0].X - x, 2) + Math.pow(player[0].Y - y, 2));
             
             while(r < distanceLimit)
             {
             	x = (float)Math.random()*width;
             	y = (float)Math.random()*height;
-            	r = (float)Math.sqrt(Math.pow(mouseX1 - x, 2) + Math.pow(mouseY1 - y, 2));
+            	r = (float)Math.sqrt(Math.pow(player[0].X - x, 2) + Math.pow(player[0].Y - y, 2));
             }
             
             enemies.add(new EnemyTypes.Monster(x, y, .8f));
@@ -419,13 +416,13 @@ public class GUI extends JPanel implements MouseMotionListener, ActionListener, 
         {
             float x = (float) Math.random() * width;
             float y = (float) Math.random() * height;
-            float r = (float) Math.sqrt(Math.pow(mouseX1 - x, 2) + Math.pow(mouseY1 - x, 2));
+            float r = (float) Math.sqrt(Math.pow(player[0].X - x, 2) + Math.pow(player[0].Y - x, 2));
 
             while (r < distanceLimit) 
             {
                 x = (float) Math.random() * width;
                 y = (float) Math.random() * height;
-                r = (float) Math.sqrt(Math.pow(mouseX1 - x, 2) + Math.pow(mouseY1 - y, 2));
+                r = (float) Math.sqrt(Math.pow(player[0].X - x, 2) + Math.pow(player[0].Y - y, 2));
             }
             
             enemies.add(new EnemyTypes.Random(x, y, 0.5f, borders));
@@ -491,12 +488,12 @@ public class GUI extends JPanel implements MouseMotionListener, ActionListener, 
                         } 
                         
                         timeElapse = 1+System.currentTimeMillis()-startTime;                         
-                        
-                        while(systemSpeed > timeElapse) //slows down program for faster PCs
+                        programLoopCounter++;
+                        if(programLoopCounter % 100 == 0)
                         {
-                            timeElapse = 1+System.currentTimeMillis()-startTime;
+                            float loopPerSec = (float)programLoopCounter/timeElapse;
+                            programSpeedAdjust = (0.1f)/loopPerSec;
                         }
-                        systemSpeed = timeElapse + 3;
                         
                         if(timeElapse > timeCircle)
                         {
@@ -521,18 +518,24 @@ public class GUI extends JPanel implements MouseMotionListener, ActionListener, 
                         
                         if(ballN > 25)
                         {
-                            Set newEnemies = new HashSet();
-                            Iterator i = enemies.iterator();
-                            while(i.hasNext()) 
+                            try
                             {
-                                Enemy e = (Enemy)i.next();
-                                if(!e.isMortal())
+                                Set newEnemies = new HashSet();
+                                Iterator i = enemies.iterator();
+                                while(i.hasNext()) 
                                 {
-                                    newEnemies.add(e);
+                                    Enemy e = (Enemy)i.next();
+                                    if(!e.isMortal())
+                                    {
+                                        newEnemies.add(e);
+                                    }
                                 }
+                                enemies = newEnemies;
+                            }catch(Exception e)
+                            {
                             }
-                            enemies = newEnemies;
                             spawnBomb();
+                            
                             if(iter++%3==0)
                             {
                             	spawnMonsters();
@@ -567,19 +570,19 @@ public class GUI extends JPanel implements MouseMotionListener, ActionListener, 
     {
     	if(up1)
     	{
-            mouseY1 -= mouseSpeed;    		
+            player[0].Y -= mouseSpeed;    		
     	}
     	if(down1)
     	{
-            mouseY1 += mouseSpeed;
+            player[0].Y += mouseSpeed;
     	}
     	if(left1)
     	{
-            mouseX1 -= mouseSpeed;
+            player[0].X -= mouseSpeed;
     	}
     	if(right1)
     	{
-            mouseX1 += mouseSpeed;
+            player[0].X += mouseSpeed;
     	}
     }
    
@@ -593,7 +596,7 @@ public class GUI extends JPanel implements MouseMotionListener, ActionListener, 
         width = this.getWidth();
         
         g.setColor(Color.white);
-        g.fillOval(mouseX1-5, mouseY1-5, 10, 10);
+        g.fillOval(player[0].X-5, player[0].Y-5, 10, 10);
         g.drawString("Score", width-50, height-35);
         g.drawString(String.valueOf(score), width-60, height-20);
         
@@ -620,33 +623,37 @@ public class GUI extends JPanel implements MouseMotionListener, ActionListener, 
                 spawnRain();
             }
             
-            Iterator i = enemies.iterator();
-            while(i.hasNext()) 
+            try
             {
-                Enemy e = (Enemy)i.next();
-                e.move(mouseX1, mouseY1);
-                e.paint(g);
-                
-                if(e.collidesWith(mouseX1, mouseY1))
-                {
-                	collision = true;
-                }
+                Iterator i = enemies.iterator();
+                while(i.hasNext()) 
+                {               
+                    Enemy e = (Enemy)i.next();
+                    e.move(player[0].X, player[0].Y, programSpeedAdjust);
+                    e.paint(g);
+
+                    if(e.collidesWith(player[0].X, player[0].Y))
+                    {
+                        collision = true;
+                    }
+                } 
+            }catch(Exception e)
+            {
             }
-            
         }     
         drawLayout(g);       
     }
       
     public void mouseDragged(MouseEvent e)
     {
-        mouseX1 = e.getX();
-        mouseY1 = e.getY();    
+        player[0].X = e.getX();
+        player[0].Y = e.getY();    
     }
     
     public void mouseMoved(MouseEvent e)
     {
-        mouseX1 = e.getX();
-        mouseY1 = e.getY();   
+        player[0].X = e.getX();
+        player[0].Y = e.getY();   
     }
        
     public void actionPerformed(ActionEvent e)
