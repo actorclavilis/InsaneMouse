@@ -32,12 +32,12 @@ public class MouseControlledPlayer extends Player implements MouseMotionListener
         //moves on mouse event only
     }
 
-    public void mouseClicked(MouseEvent e) {
+    public void mouseClicked(MouseEvent e) {}
+
+    public void mousePressed(MouseEvent e) {
         this.senbonSakura();
         e.consume();
     }
-
-    public void mousePressed(MouseEvent e) {}
 
     public void mouseReleased(MouseEvent e) {}
 
