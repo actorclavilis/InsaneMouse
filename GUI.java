@@ -52,11 +52,11 @@ public class GUI extends JPanel implements ActionListener, EnemyDeletable
         height = this.getHeight();
         
         players = new ArrayList(1);
-        MouseControlledPlayer p1 = new MouseControlledPlayer(width/2, height/2, 3, true, 10, this);
-        addMouseMotionListener(p1);
-        addMouseListener(p1);
-        //KeyboardControlledPlayer p1 = 
-        //        new KeyboardControlledPlayer(width/2, height/2, 3, true, 10, this, KeyEvent.VK_W, KeyEvent.VK_A, KeyEvent.VK_S, KeyEvent.VK_D, this.invSpeed, KeyEvent.VK_SPACE);
+        //MouseControlledPlayer p1 = new MouseControlledPlayer(width/2, height/2, 3, true, 10, this);
+        //addMouseMotionListener(p1);
+        //addMouseListener(p1);
+        KeyboardControlledPlayer p1 = 
+                new KeyboardControlledPlayer(width/2, height/2, 3, true, 10, this, KeyEvent.VK_W, KeyEvent.VK_A, KeyEvent.VK_S, KeyEvent.VK_D, this.invSpeed, KeyEvent.VK_SPACE);
         players.add(p1);
         
         borders = new int[4];
