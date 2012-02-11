@@ -247,7 +247,7 @@ public class GUI extends JPanel implements ActionListener
                 String lifeInformation = "Player " + lifeDisplayPosition + ": ";
                 for(int i = 0; i < h.getLives(); i++)
                 {
-                    lifeInformation += "☆";
+                    lifeInformation += "\u22C6";
                 }
                 g.drawString(lifeInformation, 20, lifeDisplayPosition*40);
             }
@@ -560,7 +560,7 @@ public class GUI extends JPanel implements ActionListener
         
         g.setColor(Color.WHITE);
         drawPlayers(g);
-        g.drawString("Score", width - 50, 35);
+        g.drawString("Score", width - 50, height - 35);
         g.drawString(String.valueOf(score), width-60, height-20);
         
         if(countdownF)
