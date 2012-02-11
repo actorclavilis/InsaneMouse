@@ -18,7 +18,7 @@ public class GUI extends JPanel implements ActionListener, EnemyDeletable
     private JPanel menu;
     private JButton easy, hard, back;
     private JLabel highscoreL;
-    private JRadioButton onePlayerRB, twoPlayerRB;
+    private JRadioButton onePlayerRB, twoPlayerRB, mouseRB, keyboardRB;
     private JCheckBox musicCB;
     
     private int ballN, monsterN, counterN, randomN, rainN, bombN, monsterMultiplier;
@@ -105,14 +105,20 @@ public class GUI extends JPanel implements ActionListener, EnemyDeletable
         
         onePlayerRB = new JRadioButton("One Player");
         twoPlayerRB = new JRadioButton("Two Player");
+        mouseRB = new JRadioButton("Mouse (Player 1)");
+        keyboardRB = new JRadioButton("Keyboard (Player 1)");
         musicCB = new JCheckBox("Music");
         
         onePlayerRB.setBackground(Color.darkGray);
         twoPlayerRB.setBackground(Color.darkGray);
+        mouseRB.setBackground(Color.darkGray);
+        keyboardRB.setBackground(Color.darkGray);
         musicCB.setBackground(Color.darkGray);
         
         onePlayerRB.setForeground(Color.WHITE);
         twoPlayerRB.setForeground(Color.WHITE);
+        mouseRB.setForeground(Color.WHITE);
+        keyboardRB.setForeground(Color.WHITE);
         musicCB.setForeground(Color.WHITE);
         
         ButtonGroup playerChoice = new ButtonGroup();
@@ -120,9 +126,16 @@ public class GUI extends JPanel implements ActionListener, EnemyDeletable
         playerChoice.add(twoPlayerRB);
         onePlayerRB.setSelected(true);
         
+        ButtonGroup peripheralChoice = new ButtonGroup();
+        peripheralChoice.add(mouseRB);
+        peripheralChoice.add(keyboardRB);
+        mouseRB.setSelected(true);
+        
         onePlayerRB.setBounds((width/2)+100, (height/2)-50, 100, 20);
         twoPlayerRB.setBounds((width/2)+100, (height/2)-30, 100, 20);
-        musicCB.setBounds((width/2)+100, (height/2), 100, 20);
+        mouseRB.setBounds((width/2)+100, (height/2), 200, 20);
+        keyboardRB.setBounds((width/2)+100, (height/2)+20, 200, 20);
+        musicCB.setBounds((width/2)+100, (height/2)+50, 100, 20);
         
         menu.add(title);
         menu.add(author);
@@ -131,6 +144,8 @@ public class GUI extends JPanel implements ActionListener, EnemyDeletable
         menu.add(highscoreL);
         menu.add(onePlayerRB);
         menu.add(twoPlayerRB);
+        menu.add(mouseRB);
+        menu.add(keyboardRB);
         menu.add(musicCB);    
         
         back = new JButton("Back");
