@@ -238,7 +238,7 @@ public class GUI extends JPanel implements MouseMotionListener, ActionListener, 
         else 
         {
             enemies = new HashSet();
-        }
+        }        
     }
     
     private void levelSetup()
@@ -320,13 +320,15 @@ public class GUI extends JPanel implements MouseMotionListener, ActionListener, 
                     if(!countdownF)
                     {
                         player[i].lives--;
+                        player[i].X = width/2;
+                        player[i].Y = height/2;
                         player[i].respawn = true;
                     }
                 }
             }
         }
         
-        if(((player[0].lives == 0)&&(player[1].lives == 0))||((player[0].lives == 0)&&(!player[1].isActive)))
+        if(((player[0].lives <= 0)&&(player[1].lives <= 0))||((player[0].lives <= 0)&&(!player[1].isActive)))
         {
             g.setColor(Color.red.darker());
             g.drawString("GAME OVER", width/2-20, height/2);     
@@ -481,7 +483,7 @@ public class GUI extends JPanel implements MouseMotionListener, ActionListener, 
                     {
                         countdown();
                         
-                        if(((player[0].lives == 0)&&(player[1].lives == 0))||((player[0].lives == 0)&&(!player[1].isActive)))
+                        if(((player[0].lives <= 0)&&(player[1].lives <= 0))||((player[0].lives <= 0)&&(!player[1].isActive)))
                         {              
                             if(highscore < score)
                             {
@@ -566,34 +568,38 @@ public class GUI extends JPanel implements MouseMotionListener, ActionListener, 
     }
     
     private void deleteIf(EnemyPredicate p) {
-        Set newEnemies = new HashSet(enemies.size());
-        Iterator i = enemies.iterator();
-        while (i.hasNext()) {
-            Enemy e = (Enemy) i.next();
-            if (!p.satisfiedBy(e)) {
-                newEnemies.add(e);
+        try
+        {
+            Set newEnemies = new HashSet(enemies.size());
+            Iterator i = enemies.iterator();
+            while (i.hasNext()) {
+                Enemy e = (Enemy) i.next();
+                if (!p.satisfiedBy(e)) {
+                    newEnemies.add(e);
+                }
             }
-        }
-        enemies = newEnemies;
+            enemies = newEnemies;
+        }catch(Exception e)
+        {}
     }
     
     private void movePlayers()
     {
     	if(up1)
     	{
-            player[1].Y -= mouseSpeed;    		
+            player[0].Y -= mouseSpeed;    		
     	}
     	if(down1)
     	{
-            player[1].Y += mouseSpeed;
+            player[0].Y += mouseSpeed;
     	}
     	if(left1)
     	{
-            player[1].X -= mouseSpeed;
+            player[0].X -= mouseSpeed;
     	}
     	if(right1)
     	{
-            player[1].X += mouseSpeed;
+            player[0].X += mouseSpeed;
     	}
         if(up2)
     	{
@@ -649,27 +655,28 @@ public class GUI extends JPanel implements MouseMotionListener, ActionListener, 
             {
                 spawnRain();
             }
-            
-            Iterator i = enemies.iterator();
-            while(i.hasNext()) 
+            try
             {
-                Enemy e = (Enemy)i.next();
-                e.move(player[0].X, player[0].Y, programSpeedAdjust);
-                e.paint(g);
-                
-                for(int x = 0; x < 2; x++)
+                Iterator i = enemies.iterator();
+                while(i.hasNext()) 
                 {
-                    if(player[x].isActive)
+                    Enemy e = (Enemy)i.next();
+                    e.move(player[0].X, player[0].Y, programSpeedAdjust);
+                    e.paint(g);
+
+                    for(int x = 0; x < 2; x++)
                     {
-                        if(e.collidesWith(player[x].X, player[x].Y))
+                        if(player[x].isActive)
                         {
-                            player[x].lives--;
-                            player[x].respawn = true;
+                            if(e.collidesWith(player[x].X, player[x].Y))
+                            {
+                                player[x].lives--;
+                                player[x].respawn = true;
+                            }
                         }
                     }
                 }
-            }
-            
+            }catch(Exception e) {}
         }     
         drawLayout(g);       
     }
