@@ -5,6 +5,8 @@ public abstract class Player
 {
     protected int lives;
     protected boolean isActive;
+    protected boolean hasImmunity;
+    protected long lastImmunity;
     protected int x;
     protected int y;
        
@@ -43,6 +45,21 @@ public abstract class Player
 
     public void setActive(boolean isActive) {
         this.isActive = isActive;
+    }
+    
+    public void setImmunity(boolean _hasImmunity)
+    {
+        hasImmunity = _hasImmunity;
+        lastImmunity = System.currentTimeMillis();
+    }
+    
+    public boolean getImmunity()
+    {
+        if((lastImmunity+5000) < System.currentTimeMillis())
+        {
+            hasImmunity = false;       
+        }
+        return hasImmunity;
     }
     
     public abstract void move();
