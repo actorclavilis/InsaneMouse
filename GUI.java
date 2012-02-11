@@ -222,7 +222,6 @@ public class GUI extends JPanel implements ActionListener
         spawnCircleB = false;  
         spawnMonsterB = false;
         spawnRandomersB = false;
-        collision = false;    
                         
         levelSetup();
         countdown();
@@ -322,6 +321,23 @@ public class GUI extends JPanel implements ActionListener
                     collision = true;
                 }
             } 
+=======
+        for(int i = 0; i < 2; i++)
+        {
+            if(player[i].isActive)
+            {
+                if(player[i].X < borders[0] || player[i].Y < borders[1] || player[i].X > borders[2] || player[i].Y > borders[3])
+                {
+                    if(!countdownF)
+                    {
+                        player[i].lives--;
+                        player[i].X = width/2;
+                        player[i].Y = height/2;
+                        player[i].respawn = true;
+                    }
+                }
+            }
+>>>>>>> 5d9eb012a2c873ef03c4f90eda311d1593cec08a
         }
         
         if(collision)
@@ -570,6 +586,8 @@ public class GUI extends JPanel implements ActionListener
     }
     
     private void deleteIf(EnemyPredicate p) {
+        try
+        {
         Set newEnemies = new HashSet(enemies.size());
         Iterator i = enemies.iterator();
         while (i.hasNext()) {
@@ -579,6 +597,8 @@ public class GUI extends JPanel implements ActionListener
             }
         }
         enemies = newEnemies;
+        }catch(Exception e)
+        {}
     }
     
     private void movePlayers()
