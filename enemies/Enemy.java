@@ -27,7 +27,7 @@ public abstract class Enemy
             return Color.WHITE;
 	}
 	
-	public abstract void move(int mx, int my);
+	public abstract void move(int mx, int my, float speedAdjust);
 	
 	protected float distanceFrom(float mx, float my) 
         {
@@ -38,7 +38,7 @@ public abstract class Enemy
 	
 	public boolean collidesWith(int mx, int my) 
 	{
-		return distanceFrom(mx, my) < 25;
+            return distanceFrom(mx, my) < 25;
 	}
 	
 	public void paint (Graphics g) 
