@@ -261,11 +261,16 @@ public class GUI extends JPanel implements ActionListener
         while(i.hasNext()) {
             p = (Player)i.next();
             if(p.isActive() && !countdownF &&
-                (p.getX() < borders[0] || p.getY() < borders[1] || p.getX() > borders[2] || p.getY() > borders[3]))
-                        p.decLives(width / 2, height / 2);
+                    (p.getX() < borders[0] || p.getY() < borders[1] || p.getX() > borders[2] || p.getY() > borders[3])
+                    &&(!p.getImmunity())){
+                p.decLives(width / 2, height / 2);    
+                p.setImmunity(true);
+            }                        
             if(p.getLives() <= 0) {
                 g.setColor(Color.red.darker());
-                g.drawString("GAME OVER", width/2-20, height/2);                
+                g.drawString("GAME OVER", width/2-20, height/2);
+                g.drawLine(p.getX()-15, p.getY()-15, p.getX()+15, p.getY()+15);
+                g.drawLine(p.getX()+15, p.getY()-15, p.getX()-15, p.getY()+15);
             }
         }
     }
@@ -542,12 +547,23 @@ public class GUI extends JPanel implements ActionListener
         }
     }
     
-    private void drawPlayers(Graphics g) {
+    private void drawPlayers(Graphics g) 
+    {           
         Iterator i = players.iterator();
         Player p;
-        while(i.hasNext()) {
+        while(i.hasNext()) 
+        {
             p = (Player)i.next();
-            g.fillOval(p.getX()-5, p.getY()-5, 10, 10);
+            if(p.isActive())
+            {
+                if(p.getImmunity())
+                {
+                    g.setColor(Color.red.brighter());
+                    g.drawOval(p.getX()-30, p.getY()-30, 60, 60);
+                }
+                g.setColor(Color.WHITE);
+                g.fillOval(p.getX()-5, p.getY()-5, 10, 10);
+            }
         }
     }
    
@@ -558,10 +574,9 @@ public class GUI extends JPanel implements ActionListener
         height = this.getHeight();
         width = this.getWidth();
         
-        g.setColor(Color.WHITE);
         drawPlayers(g);
-        g.drawString("Score", width - 50, 35);
-        g.drawString(String.valueOf(score), width-60, height-20);
+        g.drawString("Score", width - 60, 25);
+        g.drawString(String.valueOf(score), width-60, 40);
         
         if(countdownF)
         {
@@ -594,8 +609,9 @@ public class GUI extends JPanel implements ActionListener
                 while(j.hasNext()) {
                     Player p = (Player)j.next();
                     e.move(p.getX(), p.getY(), programSpeedAdjust/*/players.size()*/);
-                    if(e.collidesWith(p.getX(), p.getY())) {
-                        p.decLives(width/2, height/2);
+                    if((e.collidesWith(p.getX()+5, p.getY()+5))&&(!p.getImmunity())) {
+                        p.decLives(p.getX(), p.getY());
+                        p.setImmunity(true);
                     }
                 }
                 e.paint(g);
