@@ -7,6 +7,7 @@ import java.util.Iterator;
 import java.util.Set;
 import java.awt.image.*;
 import enemies.*;
+import util.*;
 
 public class GUI extends JPanel implements MouseMotionListener, ActionListener, KeyEventDispatcher
 {
@@ -521,17 +522,11 @@ public class GUI extends JPanel implements MouseMotionListener, ActionListener, 
                         
                         if(ballN > 25)
                         {
-                            Set newEnemies = new HashSet();
-                            Iterator i = enemies.iterator();
-                            while(i.hasNext()) 
-                            {
-                                Enemy e = (Enemy)i.next();
-                                if(!e.isMortal())
-                                {
-                                    newEnemies.add(e);
+                            deleteIf(new EnemyPredicate() {
+                                public boolean satisfiedBy(Enemy e) {
+                                    return e.getClass().equals(EnemyTypes.Circle.class);
                                 }
-                            }
-                            enemies = newEnemies;
+                            });
                             spawnBomb();
                             if(iter++%3==0)
                             {
@@ -561,6 +556,18 @@ public class GUI extends JPanel implements MouseMotionListener, ActionListener, 
             }
         };
         r.start();
+    }
+    
+    private void deleteIf(EnemyPredicate p) {
+        Set newEnemies = new HashSet(enemies.size());
+        Iterator i = enemies.iterator();
+        while (i.hasNext()) {
+            Enemy e = (Enemy) i.next();
+            if (!p.satisfiedBy(e)) {
+                newEnemies.add(e);
+            }
+        }
+        enemies = newEnemies;
     }
     
     private void movePlayers()
