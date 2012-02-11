@@ -18,6 +18,8 @@ public class GUI extends JPanel implements ActionListener, EnemyDeletable
     private JPanel menu;
     private JButton easy, hard, back;
     private JLabel highscoreL;
+    private JRadioButton onePlayerRB, twoPlayerRB;
+    private JCheckBox musicCB;
     
     private int ballN, monsterN, counterN, randomN, rainN, bombN, monsterMultiplier;
     private int multiplier,highscore, score, level;
@@ -101,11 +103,35 @@ public class GUI extends JPanel implements ActionListener, EnemyDeletable
         easy.setBounds((width/2)-50, (height/2)-50, 100, 20);
         hard.setBounds((width/2)-50, height/2, 100, 20);
         
+        onePlayerRB = new JRadioButton("One Player");
+        twoPlayerRB = new JRadioButton("Two Player");
+        musicCB = new JCheckBox("Music");
+        
+        onePlayerRB.setBackground(Color.darkGray);
+        twoPlayerRB.setBackground(Color.darkGray);
+        musicCB.setBackground(Color.darkGray);
+        
+        onePlayerRB.setForeground(Color.WHITE);
+        twoPlayerRB.setForeground(Color.WHITE);
+        musicCB.setForeground(Color.WHITE);
+        
+        ButtonGroup playerChoice = new ButtonGroup();
+        playerChoice.add(onePlayerRB);
+        playerChoice.add(twoPlayerRB);
+        onePlayerRB.setSelected(true);
+        
+        onePlayerRB.setBounds((width/2)+100, (height/2)-50, 100, 20);
+        twoPlayerRB.setBounds((width/2)+100, (height/2)-30, 100, 20);
+        musicCB.setBounds((width/2)+100, (height/2), 100, 20);
+        
         menu.add(title);
         menu.add(author);
         menu.add(easy);
         menu.add(hard);
         menu.add(highscoreL);
+        menu.add(onePlayerRB);
+        menu.add(twoPlayerRB);
+        menu.add(musicCB);    
         
         back = new JButton("Back");
         back.setBounds(width/2-40, height/2+20, 100, 20);
