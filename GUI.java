@@ -23,14 +23,14 @@ public class GUI extends JPanel implements MouseMotionListener, ActionListener, 
     private int invSpeed, defaultDistance, width, height, timeDifficulty1, timeDifficulty2, distanceLimit;
     private int[] borders;
     
-    private long startTime, timeElapse, timeLast, timeCircle, timeRain;
+    private long startTime, timeElapse, timeLast, timeCircle, timeRain, programLoopCounter;
     private long shrapnelLifetime = 3000;
     
     private boolean countdownF, spawnCircleB, spawnMonsterB, spawnRandomersB, spawnRainB;
     private boolean circular, spawnIncrease, collision;
     private boolean up1, down1, left1, right1, up2, down2, left2, right2;
     
-    private float distance;
+    private float distance, programSpeedAdjust;
     
     private Set enemies;			
     private Thread t, r;   
@@ -58,7 +58,6 @@ public class GUI extends JPanel implements MouseMotionListener, ActionListener, 
         mouseSpeed = 1;             
         width = this.getWidth();
         height = this.getHeight();    
-        System.out.println(height);
         player[0].X = width/2;
         player[0].Y = (height+100)/2;
 
@@ -215,6 +214,8 @@ public class GUI extends JPanel implements MouseMotionListener, ActionListener, 
         counterN = 10;
         timeCircle = 0;
         timeRain = 0;
+        programLoopCounter = 1;
+        programSpeedAdjust = 1;
                       
         countdownF = true;
         circular = true;
@@ -484,7 +485,13 @@ public class GUI extends JPanel implements MouseMotionListener, ActionListener, 
                             break;
                         } 
                         
-                        timeElapse = 1+System.currentTimeMillis()-startTime;                         
+                        timeElapse = 1+System.currentTimeMillis()-startTime;  
+                        programLoopCounter++;
+                        if(programLoopCounter % 100 == 0)
+                        {
+                            float loopPerSec = (float)programLoopCounter/timeElapse;
+                            programSpeedAdjust = (0.3f)/loopPerSec;
+                        }
                                                
                         if(timeElapse > timeCircle)
                         {
@@ -625,7 +632,7 @@ public class GUI extends JPanel implements MouseMotionListener, ActionListener, 
             while(i.hasNext()) 
             {
                 Enemy e = (Enemy)i.next();
-                e.move(player[0].X, player[0].Y);
+                e.move(player[0].X, player[0].Y, programSpeedAdjust);
                 e.paint(g);
                 
                 if(e.collidesWith(player[0].X, player[0].Y))
