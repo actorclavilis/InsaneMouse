@@ -11,6 +11,8 @@ public abstract class Player {
             SENBONSAKURA_SQUARE = SENBONSAKURA_RADIUS*SENBONSAKURA_RADIUS;
     protected int lives;
     protected boolean isActive;
+    protected boolean hasImmunity;
+    protected long lastImmunity;
     protected int x;
     protected int y;
     protected EnemyDeletable parent;
@@ -36,6 +38,21 @@ public abstract class Player {
 
     public int getLives() {
         return lives;
+    }
+    
+    public void setImmunity(boolean _hasImmunity)
+    {
+        hasImmunity = _hasImmunity;
+        lastImmunity = System.currentTimeMillis();
+    }
+    
+    public boolean getImmunity()
+    {
+        if((lastImmunity+5000) < System.currentTimeMillis())
+        {
+            hasImmunity = false;       
+        }
+        return hasImmunity;
     }
 
     public void resetLives(int _lives) {
@@ -68,7 +85,8 @@ public abstract class Player {
         g.setColor(Color.WHITE);
         g.fillOval(x - 5, y - 5, 10, 10);
         if (senbonSakuraC-->0) {
-            g.fillOval(x, y, SENBONSAKURA_RADIUS, SENBONSAKURA_RADIUS);
+            g.setColor(Color.PINK);
+            g.fillOval(x-SENBONSAKURA_RADIUS/2, y-SENBONSAKURA_RADIUS/2, SENBONSAKURA_RADIUS, SENBONSAKURA_RADIUS);
             parent.deleteIf(new EnemyPredicate() {
                 public boolean satisfiedBy(Enemy e) {
                     float p1 = (x + 5) - e.getX();

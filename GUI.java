@@ -52,11 +52,11 @@ public class GUI extends JPanel implements ActionListener, EnemyDeletable
         height = this.getHeight();
         
         players = new ArrayList(1);
-        //MouseControlledPlayer p1 = new MouseControlledPlayer(width/2, height/2, 3, true, 10, this);
-        //addMouseMotionListener(p1);
-        //addMouseListener(p1);
-        KeyboardControlledPlayer p1 = 
-                new KeyboardControlledPlayer(width/2, height/2, 3, true, 10, this, KeyEvent.VK_W, KeyEvent.VK_A, KeyEvent.VK_S, KeyEvent.VK_D, this.invSpeed, KeyEvent.VK_SPACE);
+        MouseControlledPlayer p1 = new MouseControlledPlayer(width/2, height/2, 3, true, 10, this);
+        addMouseMotionListener(p1);
+        addMouseListener(p1);
+        //KeyboardControlledPlayer p1 = 
+        //        new KeyboardControlledPlayer(width/2, height/2, 3, true, 10, this, KeyEvent.VK_W, KeyEvent.VK_A, KeyEvent.VK_S, KeyEvent.VK_D, this.invSpeed, KeyEvent.VK_SPACE);
         players.add(p1);
         
         borders = new int[4];
@@ -547,7 +547,7 @@ public class GUI extends JPanel implements ActionListener, EnemyDeletable
         while(i.hasNext()) 
         {
             p = (Player)i.next();
-<<<<<<< HEAD
+
             if(p.isActive())
             {
                 if(p.getImmunity())
@@ -558,9 +558,8 @@ public class GUI extends JPanel implements ActionListener, EnemyDeletable
                 g.setColor(Color.WHITE);
                 g.fillOval(p.getX()-5, p.getY()-5, 10, 10);
             }
-=======
+
             p.paint(g);
->>>>>>> c92c826c26058c57510eb459708dade838967c0f
         }
     }
    
