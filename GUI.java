@@ -1,4 +1,5 @@
 
+import player.*;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
@@ -7,9 +8,10 @@ import java.util.Iterator;
 import java.util.Set;
 import java.awt.image.*;
 import enemies.*;
+import java.util.ArrayList;
 import util.*;
 
-public class GUI extends JPanel implements MouseMotionListener, ActionListener, KeyEventDispatcher
+public class GUI extends JPanel implements ActionListener
 {
     private Dimension d; 
       
@@ -32,7 +34,8 @@ public class GUI extends JPanel implements MouseMotionListener, ActionListener, 
     
     private float distance, programSpeedAdjust;
     
-    private Set enemies;			
+    private Set enemies;
+    private java.util.List players;
     private Thread t, r;   
     private scbClass scbInstance = new scbClass();
     private Player[] player;
@@ -43,24 +46,20 @@ public class GUI extends JPanel implements MouseMotionListener, ActionListener, 
         
         this.setBackground(Color.darkGray);
         this.setLayout(null);
-        this.setBounds(0, 0, d.width, d.height);           
-        this.addMouseMotionListener(this);
+        this.setBounds(0, 0, d.width, d.height); 
         this.setFocusable(true);
         this.setVisible(true);
-        
-        KeyboardFocusManager.getCurrentKeyboardFocusManager().addKeyEventDispatcher(this);
-        
-        player = new Player[2];
-        player[0] = new Player();
-        player[1] = new Player(false);
         
         highscore = 0;
         mouseSpeed = 1;             
         width = this.getWidth();
-        height = this.getHeight();    
-        player[0].X = width/2;
-        player[0].Y = (height+100)/2;
-
+        height = this.getHeight();
+        
+        players = new ArrayList(1);
+        MouseControlledPlayer p1 = new MouseControlledPlayer(width/2, (height+100)/2, 3, true);
+        addMouseMotionListener(p1);
+        players.add(p1);
+        
         borders = new int[4];
         borders[0] = 15;
         borders[1] = 15;
@@ -312,13 +311,18 @@ public class GUI extends JPanel implements MouseMotionListener, ActionListener, 
         borders[2] = width-20;
         borders[3] = height-20;
         
-        if(player[0].X < borders[0] || player[0].Y < borders[1] || player[0].X > borders[2] || player[0].Y > borders[3])
-        {
-            if(!countdownF)
+        Iterator i = players.iterator();
+        Player p;
+        while(i.hasNext()) {
+            p = (Player)i.next();
+            if(p.getX() < borders[0] || p.getY() < borders[1] || p.getX() > borders[2] || p.getY() > borders[3])
             {
-                collision = true;
-            }
-        } 
+                if(!countdownF)
+                {
+                    collision = true;
+                }
+            } 
+        }
         
         if(collision)
         {
@@ -363,8 +367,8 @@ public class GUI extends JPanel implements MouseMotionListener, ActionListener, 
             for(int i = 0; i < ballN; i++) 
             {
                 double degree = Math.random()*2*Math.PI;
-                float x = player[0].X + distance * (float) Math.sin(degree * i);
-                float y = player[0].Y + distance * (float) Math.cos(degree * i);
+                float x = ((Player)players.get(0)).getX() + distance * (float) Math.sin(degree * i);
+                float y = ((Player)players.get(0)).getY() + distance * (float) Math.cos(degree * i);
                 enemies.add(new EnemyTypes.Circle(x, y, invSpeed));
             }
         } 
@@ -393,13 +397,15 @@ public class GUI extends JPanel implements MouseMotionListener, ActionListener, 
         {
             float x = (float)Math.random()*width;
             float y = (float)Math.random()*height;          
-            float r = (float)Math.sqrt(Math.pow(player[0].X - x, 2) + Math.pow(player[0].Y - y, 2));
+            float r = (float)Math.sqrt(Math.pow(((Player)players.get(0)).getX() - x, 2) 
+                    + Math.pow(((Player)players.get(0)).getY() - y, 2));
             
             while(r < distanceLimit)
             {
             	x = (float)Math.random()*width;
             	y = (float)Math.random()*height;
-            	r = (float)Math.sqrt(Math.pow(player[0].X - x, 2) + Math.pow(player[0].Y - y, 2));
+            	r = (float)Math.sqrt(Math.pow(((Player)players.get(0)).getX() - x, 2) 
+                        + Math.pow(((Player)players.get(0)).getY() - y, 2));
             }
             
             enemies.add(new EnemyTypes.Monster(x, y, .8f));
@@ -414,13 +420,15 @@ public class GUI extends JPanel implements MouseMotionListener, ActionListener, 
         {
             float x = (float) Math.random() * width;
             float y = (float) Math.random() * height;
-            float r = (float) Math.sqrt(Math.pow(player[0].X - x, 2) + Math.pow(player[0].Y - x, 2));
+            float r = (float) Math.sqrt(Math.pow(((Player)players.get(0)).getX() - x, 2) 
+                    + Math.pow(((Player)players.get(0)).getY() - x, 2));
 
             while (r < distanceLimit) 
             {
                 x = (float) Math.random() * width;
                 y = (float) Math.random() * height;
-                r = (float) Math.sqrt(Math.pow(player[0].X - x, 2) + Math.pow(player[0].Y - y, 2));
+                r = (float) Math.sqrt(Math.pow(((Player)players.get(0)).getX() - x, 2) 
+                        + Math.pow(((Player)players.get(0)).getY() - y, 2));
             }
             
             enemies.add(new EnemyTypes.Random(x, y, 0.5f, borders));
@@ -537,6 +545,8 @@ public class GUI extends JPanel implements MouseMotionListener, ActionListener, 
                                     && (System.currentTimeMillis() - ((EnemyTypes.Shrapnel)e).getBorn() > shrapnelLifetime);
                             }
                         });
+                        
+                        movePlayers();
                     }
 
                     try
@@ -573,36 +583,31 @@ public class GUI extends JPanel implements MouseMotionListener, ActionListener, 
     
     private void movePlayers()
     {
-    	if(up1)
-    	{
-            player[0].Y -= mouseSpeed;    		
-    	}
-    	if(down1)
-    	{
-            player[0].Y += mouseSpeed;
-    	}
-    	if(left1)
-    	{
-            player[0].X -= mouseSpeed;
-    	}
-    	if(right1)
-    	{
-            player[0].X += mouseSpeed;
-    	}
+        Iterator i = players.iterator();
+        while(i.hasNext()) {
+            ((Player)i.next()).move();
+        }
+    }
+    
+    private void drawPlayers(Graphics g) {
+        Iterator i = players.iterator();
+        Player p;
+        while(i.hasNext()) {
+            p = (Player)i.next();
+            g.fillOval(p.getX()-5, p.getY()-5, 10, 10);
+        }
     }
    
     public void paintComponent(Graphics g)
     {
         super.paintComponent(g);
-        
-       	movePlayers();
        	
         height = this.getHeight();
         width = this.getWidth();
         
-        g.setColor(Color.white);
-        g.fillOval(player[0].X-5, player[0].Y-5, 10, 10);
-        g.drawString("Score", width-50, height-35);
+        g.setColor(Color.WHITE);
+        drawPlayers(g);
+        g.drawString("Score", width - 50, height - 35);
         g.drawString(String.valueOf(score), width-60, height-20);
         
         if(countdownF)
@@ -632,29 +637,18 @@ public class GUI extends JPanel implements MouseMotionListener, ActionListener, 
             while(i.hasNext()) 
             {
                 Enemy e = (Enemy)i.next();
-                e.move(player[0].X, player[0].Y, programSpeedAdjust);
-                e.paint(g);
-                
-                if(e.collidesWith(player[0].X, player[0].Y))
-                {
-                	collision = true;
+                Iterator j = players.iterator();
+                while(j.hasNext()) {
+                    Player p = (Player)j.next();
+                    e.move(p.getX(), p.getY(), programSpeedAdjust/*/players.size()*/);
+                    collision = collision ||
+                            e.collidesWith(p.getX(), p.getY());
                 }
+                e.paint(g);
             }
             
         }     
         drawLayout(g);       
-    }
-      
-    public void mouseDragged(MouseEvent e)
-    {
-        player[0].X = e.getX();
-        player[0].Y = e.getY();    
-    }
-    
-    public void mouseMoved(MouseEvent e)
-    {
-        player[0].X = e.getX();
-        player[0].Y = e.getY();   
     }
        
     public void actionPerformed(ActionEvent e)
