@@ -4,16 +4,16 @@
  */
 package player;
 
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseMotionListener;
+import java.awt.event.*;
+import util.*;
 
 /**
  *
  * @author harrison
  */
-public class MouseControlledPlayer extends Player implements MouseMotionListener {
-    public MouseControlledPlayer(int _x, int _y, int _lives, boolean _active) {
-        super(_x, _y, _lives, _active);
+public class MouseControlledPlayer extends Player implements MouseMotionListener, MouseListener {
+    public MouseControlledPlayer(int _x, int _y, int _lives, boolean _active, int _sbsk, EnemyDeletable _parent) {
+        super(_x, _y, _lives, _active, _sbsk, _parent);
     }
 
     public void mouseDragged(MouseEvent e) {
@@ -31,4 +31,17 @@ public class MouseControlledPlayer extends Player implements MouseMotionListener
     public void move() {
         //moves on mouse event only
     }
+
+    public void mouseClicked(MouseEvent e) {}
+
+    public void mousePressed(MouseEvent e) {
+        this.senbonSakura();
+        e.consume();
+    }
+
+    public void mouseReleased(MouseEvent e) {}
+
+    public void mouseEntered(MouseEvent e) {}
+
+    public void mouseExited(MouseEvent e) {}
 }
