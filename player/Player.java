@@ -27,6 +27,11 @@ public abstract class Player
     public int getLives() {
         return lives;
     }
+    
+    public void decLives(int _x, int _y) {
+        lives--;
+        x = _x; y = _y;
+    }
 
     public boolean isActive() {
         return isActive;

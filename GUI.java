@@ -314,36 +314,14 @@ public class GUI extends JPanel implements ActionListener
         Player p;
         while(i.hasNext()) {
             p = (Player)i.next();
-            if(p.getX() < borders[0] || p.getY() < borders[1] || p.getX() > borders[2] || p.getY() > borders[3])
-            {
-                if(!countdownF)
-                {
-                    collision = true;
-                }
-            } 
-=======
-        for(int i = 0; i < 2; i++)
-        {
-            if(player[i].isActive)
-            {
-                if(player[i].X < borders[0] || player[i].Y < borders[1] || player[i].X > borders[2] || player[i].Y > borders[3])
-                {
-                    if(!countdownF)
-                    {
-                        player[i].lives--;
-                        player[i].X = width/2;
-                        player[i].Y = height/2;
-                        player[i].respawn = true;
-                    }
-                }
+            if(p.isActive() && !countdownF &&
+                (p.getX() < borders[0] || p.getY() < borders[1] || p.getX() > borders[2] || p.getY() > borders[3]))
+                        p.decLives(width / 2, height / 2);
+            if(p.getLives() <= 0) {
+                g.setColor(Color.red.darker());
+                g.drawString("GAME OVER", width/2-20, height/2);                
+                collision = true;
             }
->>>>>>> 5d9eb012a2c873ef03c4f90eda311d1593cec08a
-        }
-        
-        if(collision)
-        {
-            g.setColor(Color.red.darker());
-            g.drawString("GAME OVER", width/2-20, height/2);          
         }
     }
        
@@ -661,8 +639,9 @@ public class GUI extends JPanel implements ActionListener
                 while(j.hasNext()) {
                     Player p = (Player)j.next();
                     e.move(p.getX(), p.getY(), programSpeedAdjust/*/players.size()*/);
-                    collision = collision ||
-                            e.collidesWith(p.getX(), p.getY());
+                    if(e.collidesWith(p.getX(), p.getY())) {
+                        p.decLives(width/2, height/2);
+                    }
                 }
                 e.paint(g);
             }
