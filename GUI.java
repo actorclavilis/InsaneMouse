@@ -247,7 +247,7 @@ public class GUI extends JPanel implements ActionListener
                 String lifeInformation = "Player " + lifeDisplayPosition + ": ";
                 for(int i = 0; i < h.getLives(); i++)
                 {
-                    lifeInformation += "☆";
+                    lifeInformation += "\u2606";
                 }
                 g.drawString(lifeInformation, 20, lifeDisplayPosition*40);
             }
