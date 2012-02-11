@@ -14,8 +14,8 @@ public abstract class Player {
     protected int x;
     protected int y;
     protected EnemyDeletable parent;
-    private boolean senbonSakuraF = false;
     private int senbonSakuraN;
+    private int senbonSakuraC;
 
     public Player(int _x, int _y, int numberOfLives, boolean startActive, int numberOfSenbonsakura, EnemyDeletable _parent) {
         lives = numberOfLives;
@@ -60,14 +60,14 @@ public abstract class Player {
 
     protected void senbonSakura() {
         if (senbonSakuraN-- > 0) {
-            senbonSakuraF = true;
+            senbonSakuraC = 40;
         }
     }
 
     public void paint(Graphics g) {
         g.setColor(Color.WHITE);
         g.fillOval(x - 5, y - 5, 10, 10);
-        if (senbonSakuraF) {
+        if (senbonSakuraC-->0) {
             g.fillOval(x, y, SENBONSAKURA_RADIUS, SENBONSAKURA_RADIUS);
             parent.deleteIf(new EnemyPredicate() {
                 public boolean satisfiedBy(Enemy e) {
@@ -76,7 +76,6 @@ public abstract class Player {
                     return (p1*p1 + p2*p2) < SENBONSAKURA_SQUARE;
                 }
             });
-            senbonSakuraF = false;
         }
     }
 }
