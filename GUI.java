@@ -50,14 +50,6 @@ public class GUI extends JPanel implements ActionListener, EnemyDeletable
         width = this.getWidth();
         height = this.getHeight();
         
-        players = new ArrayList(1);
-        MouseControlledPlayer p1 = new MouseControlledPlayer(width/2, height/2, 3, true, 10, this);
-        addMouseMotionListener(p1);
-        addMouseListener(p1);
-        //KeyboardControlledPlayer p1 = 
-        //        new KeyboardControlledPlayer(width/2, height/2, 3, true, 10, this, KeyEvent.VK_W, KeyEvent.VK_A, KeyEvent.VK_S, KeyEvent.VK_D, this.invSpeed, KeyEvent.VK_SPACE);
-        players.add(p1);
-        
         borders = new int[4];
         borders[0] = 15;
         borders[1] = 15;
@@ -66,7 +58,17 @@ public class GUI extends JPanel implements ActionListener, EnemyDeletable
         
         makeMenuScreen();
         this.add(menu);
-    }  
+    }
+
+    private void playerSetup() {
+        players = new ArrayList(1);
+        MouseControlledPlayer p1 = new MouseControlledPlayer(width / 2, height / 2, 3, true, 10, this);
+        addMouseMotionListener(p1);
+        addMouseListener(p1);
+        //KeyboardControlledPlayer p1 = 
+        //        new KeyboardControlledPlayer(width/2, height/2, 3, true, 10, this, KeyEvent.VK_W, KeyEvent.VK_A, KeyEvent.VK_S, KeyEvent.VK_D, this.invSpeed, KeyEvent.VK_SPACE);
+        players.add(p1);
+    }
         
     private void makeMenuScreen()
     {     
@@ -114,6 +116,8 @@ public class GUI extends JPanel implements ActionListener, EnemyDeletable
     
     private void setup()
     {
+        playerSetup();
+        
         this.remove(menu);
         this.revalidate();
         

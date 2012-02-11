@@ -7,8 +7,10 @@ import util.EnemyPredicate;
 
 public abstract class Player {
 
-    private static final int SENBONSAKURA_RADIUS = 100, 
-            SENBONSAKURA_SQUARE = SENBONSAKURA_RADIUS*SENBONSAKURA_RADIUS;
+    private static final int 
+            SENBONSAKURA_RADIUS = 250, 
+            SENBONSAKURA_SQUARE = SENBONSAKURA_RADIUS*SENBONSAKURA_RADIUS,
+            IMMUNITY_LIFETIME = 2000;
     protected int lives;
     protected boolean isActive;
     protected boolean hasImmunity;
@@ -48,7 +50,7 @@ public abstract class Player {
     
     public boolean getImmunity()
     {
-        if((lastImmunity+5000) < System.currentTimeMillis())
+        if((lastImmunity+IMMUNITY_LIFETIME) < System.currentTimeMillis())
         {
             hasImmunity = false;       
         }
