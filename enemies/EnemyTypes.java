@@ -26,7 +26,7 @@ public final class EnemyTypes
             invSpeed = _invSpeed;
         }
 
-        public void move(int mx, int my, float speedAdjust) 
+        public void move(int mx, int my) 
         {
             int directionX = 1;
             int directionY = 1;
@@ -49,8 +49,8 @@ public final class EnemyTypes
             float deltaX = deltaD * (float) Math.abs(Math.cos(angle)) * directionX;
             float deltaY = deltaD * (float) Math.abs(Math.sin(angle)) * directionY;
 
-            x += deltaX*speedAdjust;
-            y += deltaY*speedAdjust;
+            x += deltaX;
+            y += deltaY;
         }
 
         public boolean isMortal() 
@@ -74,7 +74,7 @@ public final class EnemyTypes
             speed = _speed;
         }
 
-        public void move(int mx, int my, float speedAdjust) 
+        public void move(int mx, int my) 
         {
             int directionX = 1;
             int directionY = 1;
@@ -94,8 +94,8 @@ public final class EnemyTypes
             float deltaX = speed * (float) Math.abs(Math.cos(angle)) * directionX;
             float deltaY = speed * (float) Math.abs(Math.sin(angle)) * directionY;
 
-            x += deltaX*speedAdjust;
-            y += deltaY*speedAdjust;
+            x += deltaX;
+            y += deltaY;
         }
     }
 
@@ -126,7 +126,7 @@ public final class EnemyTypes
             this(_x, _y, 4, null);
         }
 
-        public void move(int mx, int my, float speedAdjust)
+        public void move(int mx, int my)
         {     
             if(x > borders[2])
             {                
@@ -145,8 +145,8 @@ public final class EnemyTypes
             	vy = Math.abs(vy);
             }
             
-            x += vx*speedAdjust;
-            y += vy*speedAdjust;
+            x += vx;
+            y += vy;
         }
     }
 
@@ -171,10 +171,10 @@ public final class EnemyTypes
             this(_x, _y, (float)2.4);
         }
 
-        public void move(int mx, int my, float speedAdjust) 
+        public void move(int mx, int my) 
         {
-            x += vx*speedAdjust;
-            y += vy*speedAdjust;
+            x += vx;
+            y += vy;
         }
     }
     
@@ -194,23 +194,12 @@ public final class EnemyTypes
             borders = _borders;
         }
         
-        public void move(int mx, int my, float speedAdjust) 
-        {           
-            if(existant) 
-            {
-                super.move(mx, my, speedAdjust);                
-                if(distanceFrom(mx, my) < 10000) 
-                {                    
-                    for (int i = 0; i < PIECES; i++) 
-                    {
-                        Enemy e = new EnemyTypes.Random (x, y, speed*3, borders) 
-                        {
-                            public boolean isMortal() 
-                            {
-                                return true;
-                            }
-                        };
-                        mod.add(e);
+        public void move(int mx, int my) {
+            if(existant) {
+                super.move(mx, my);
+                if(distanceFrom(mx, my) < 10000) {
+                    for (int i = 0; i < PIECES; i++) {
+                        mod.add(new Shrapnel(x, y, speed, borders));
                     }
                     existant = false;
                 }
@@ -228,6 +217,22 @@ public final class EnemyTypes
         
         public boolean collidesWith(int mx, int my) {
             return existant && super.collidesWith(mx, my);
+        }
+    }
+    
+    public static class Shrapnel extends Random {
+        private long ctmBorn = System.currentTimeMillis();
+        
+        public Shrapnel(float _x, float _y, float _speed, int[] _borders) {
+            super(_x, _y, _speed, _borders);
+        }
+        
+        public Color getColor() {
+            return Color.CYAN;
+        }
+        
+        public long getBorn() {
+            return ctmBorn;
         }
     }
 }
