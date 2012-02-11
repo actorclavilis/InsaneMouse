@@ -93,19 +93,19 @@ public class GUI extends JPanel implements MouseMotionListener, ActionListener, 
             }
             if(e.getKeyCode() == KeyEvent.VK_NUMPAD8)
             {
-                up1 = true;    		
+                up2 = true;    		
             }
             if(e.getKeyCode() == KeyEvent.VK_NUMPAD5)
             {
-                down1 = true;
+                down2 = true;
             }
             if(e.getKeyCode() == KeyEvent.VK_NUMPAD4)
             {
-                left1 = true;
+                left2 = true;
             }
             if(e.getKeyCode() == KeyEvent.VK_NUMPAD6)
             {
-                right1 = true;
+                right2 = true;
             }
         }
 	    
@@ -129,19 +129,19 @@ public class GUI extends JPanel implements MouseMotionListener, ActionListener, 
             }
             if(e.getKeyCode() == KeyEvent.VK_NUMPAD8)
             {
-                up1 = false;    		
+                up2 = false;    		
             }
             if(e.getKeyCode() == KeyEvent.VK_NUMPAD5)
             {
-                down1 = false;
+                down2 = false;
             }
             if(e.getKeyCode() == KeyEvent.VK_NUMPAD4)
             {
-                left1 = false;
+                left2 = false;
             }
             if(e.getKeyCode() == KeyEvent.VK_NUMPAD6)
             {
-                right1 = false;
+                right2 = false;
             }
         }
 	    
@@ -581,19 +581,35 @@ public class GUI extends JPanel implements MouseMotionListener, ActionListener, 
     {
     	if(up1)
     	{
-            player[0].Y -= mouseSpeed;    		
+            player[1].Y -= mouseSpeed;    		
     	}
     	if(down1)
     	{
-            player[0].Y += mouseSpeed;
+            player[1].Y += mouseSpeed;
     	}
     	if(left1)
     	{
-            player[0].X -= mouseSpeed;
+            player[1].X -= mouseSpeed;
     	}
     	if(right1)
     	{
-            player[0].X += mouseSpeed;
+            player[1].X += mouseSpeed;
+    	}
+        if(up2)
+    	{
+            player[1].Y -= mouseSpeed;    		
+    	}
+    	if(down2)
+    	{
+            player[1].Y += mouseSpeed;
+    	}
+    	if(left2)
+    	{
+            player[1].X -= mouseSpeed;
+    	}
+    	if(right2)
+    	{
+            player[1].X += mouseSpeed;
     	}
     }
    
