@@ -235,6 +235,24 @@ public class GUI extends JPanel implements ActionListener
         g.setColor(Color.blue);
         g.drawRect(10, 10, width-20, height-20);
 
+        g.setColor(Color.red.brighter());
+        Iterator f = players.iterator();
+        int lifeDisplayPosition = 0;
+        while(f.hasNext()) 
+        {
+            Player h = (Player)f.next();
+            if(h.isActive())
+            {
+                lifeDisplayPosition++;
+                String lifeInformation = "Player " + lifeDisplayPosition + ": ";
+                for(int i = 0; i < h.getLives(); i++)
+                {
+                    lifeInformation += "☆";
+                }
+                g.drawString(lifeInformation, 20, lifeDisplayPosition*40);
+            }
+        }
+        
         borders[2] = width-20;
         borders[3] = height-20;
         
@@ -542,7 +560,7 @@ public class GUI extends JPanel implements ActionListener
         
         g.setColor(Color.WHITE);
         drawPlayers(g);
-        g.drawString("Score", width - 50, height - 35);
+        g.drawString("Score", width - 50, 35);
         g.drawString(String.valueOf(score), width-60, height-20);
         
         if(countdownF)
