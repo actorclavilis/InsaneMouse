@@ -153,28 +153,35 @@ public final class EnemyTypes
     public static class Rain extends Enemy 
     {
         private float vx, vy;
+        private int floor;
 
         public Color getColor() 
         {
             return Color.YELLOW;
         }
 
-        public Rain(float _x, float _y, float _speed) 
+        public Rain(float _x, float _y, float _speed, int _floor) 
         {
             super(_x, _y);
+            floor = _floor;
             vx = -_speed;
             vy = _speed;
         }
 
-        public Rain(int _x, int _y) 
+        public Rain(int _x, int _y, int _floor) 
         {
-            this(_x, _y, (float)2.4);
+            this(_x, _y, (float)2.4, _floor);
         }
 
         public void move(int mx, int my, float speedAdjust) 
         {
-            x += vx*speedAdjust;
-            y += vy*speedAdjust;
+            x += vx*speedAdjust*0.2;
+            y += vy*speedAdjust*0.2;
+            if(y > floor)
+            {
+                x = x+y;
+                y = 0;
+            }
         }
     }
     
