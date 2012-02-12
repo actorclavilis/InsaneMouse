@@ -7,31 +7,10 @@ class MP3
     private Player player; 
     private Thread t;
     private boolean play;
-
+    
     public MP3() throws Exception
     {   
         play = false;
-    }
-    
-    public void stop() 
-    {
-        if(player != null)
-        {
-            player.close();
-        } 
-        play = false;
-        try
-        {
-            t.wait();
-        }catch(Exception e)
-        {}
-        t = null;
-        player = null;
-    }
-
-    public void play() 
-    {     
-        play = true;
         t = new Thread() {
             public void run() 
             {
@@ -53,6 +32,21 @@ class MP3
                 }
             }
         };
-        t.start();            
+        t.start(); 
+    }
+    
+    public void stop() 
+    {
+        play = false;
+        if(player != null)
+        {
+            player.close();
+        } 
+        player = null;      
+    }
+
+    public void play() 
+    {     
+        play = true;                       
     }
 }
