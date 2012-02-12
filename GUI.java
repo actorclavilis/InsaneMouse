@@ -64,6 +64,19 @@ public class GUI extends JPanel implements ActionListener, EnemyDeletable
     }
 
     private void playerSetup() {
+        if (players != null) {
+            Iterator i = players.iterator();
+            while (i.hasNext()) {
+                Player p = (Player) i.next();
+                if (p instanceof MouseControlledPlayer) {
+                    MouseControlledPlayer m = (MouseControlledPlayer) p;
+                    removeMouseListener(m);
+                    removeMouseMotionListener(m);
+                } else if (p instanceof KeyboardControlledPlayer) {
+                    KeyboardFocusManager.getCurrentKeyboardFocusManager().removeKeyEventDispatcher((KeyboardControlledPlayer) p);
+                }
+            }
+        }
         players = new ArrayList(1);
         if(mouseRB.isSelected()) {
             MouseControlledPlayer p1 = new MouseControlledPlayer(width / 2, height / 2, 3, true, 10, this);
