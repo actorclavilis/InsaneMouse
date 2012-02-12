@@ -53,9 +53,21 @@ public class KeyboardControlledPlayer extends Player implements KeyEventDispatch
     }
 
     public void move() {
-        x += mRight? speed: 0;
-        x -= mLeft?  speed: 0;
-        y += mDown?  speed: 0;
-        y -= mUp?    speed: 0;
+        if(mRight)
+        {
+            x++;
+        }
+        if(mLeft)
+        {
+            x--;
+        }
+        if(mDown)
+        {
+            y++;
+        }
+        if(mUp)
+        {
+            y--;
+        }
     }
 }

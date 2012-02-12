@@ -73,6 +73,7 @@ public class GUI extends JPanel implements ActionListener, EnemyDeletable
         else {
             KeyboardControlledPlayer p1 = 
                 new KeyboardControlledPlayer(width/2, height/2, 3, true, 10, this, KeyEvent.VK_W, KeyEvent.VK_A, KeyEvent.VK_S, KeyEvent.VK_D, this.invSpeed, KeyEvent.VK_SPACE);
+            KeyboardFocusManager.getCurrentKeyboardFocusManager().addKeyEventDispatcher(p1);
             players.add(p1);
         }
     }
@@ -164,7 +165,7 @@ public class GUI extends JPanel implements ActionListener, EnemyDeletable
     {
         playerSetup();
         
-        this.remove(menu);
+        menu.setVisible(false);
         this.revalidate();
         
         Iterator i = players.iterator();
@@ -731,7 +732,7 @@ public class GUI extends JPanel implements ActionListener, EnemyDeletable
         else if(e.getSource() == back)
         {
             r = null;
-            this.add(menu);      	
+            menu.setVisible(true);      	
             back.setVisible(false);
             this.revalidate();        
             repaint();            
