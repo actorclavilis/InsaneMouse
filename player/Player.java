@@ -21,7 +21,7 @@ public abstract class Player {
     protected EnemyDeletable parent;
     private int senbonSakuraN;
     private int senbonSakuraC;
-    private long senbonSakuraT = Long.MAX_VALUE;
+    private long senbonSakuraT = 0;
     protected int infoOffset;
 
     public Player(int _x, int _y, int numberOfLives, boolean startActive, int numberOfSenbonsakura, EnemyDeletable _parent, int _infoOffset) {
@@ -82,7 +82,7 @@ public abstract class Player {
     public abstract void move();
 
     protected void senbonSakura() {
-        if ((System.currentTimeMillis() - senbonSakuraT)>SENBONSAKURA_TIMEOUT && senbonSakuraN-- > 0) {
+        if (((System.currentTimeMillis() - senbonSakuraT)>SENBONSAKURA_TIMEOUT)&&(senbonSakuraN-- > 0)) {
             senbonSakuraC = 40;
             parent.deleteIf(new EnemyPredicate() {
                 public boolean satisfiedBy(Enemy e) {
@@ -102,7 +102,7 @@ public abstract class Player {
             g.setColor(Color.PINK);
             g.fillOval(x-SENBONSAKURA_RADIUS/2, y-SENBONSAKURA_RADIUS/2, SENBONSAKURA_RADIUS, SENBONSAKURA_RADIUS);
         }
-        int barWidth = (int)Math.max(SENBONSAKURA_TIMEOUT, System.currentTimeMillis()-senbonSakuraT);
+        int barWidth = (int)Math.min(SENBONSAKURA_TIMEOUT, System.currentTimeMillis()-senbonSakuraT);
         barWidth *=.05;
         g.setColor(Color.PINK);
         g.fillRect(100, infoOffset, barWidth, 5);
