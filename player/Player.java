@@ -35,6 +35,7 @@ public abstract class Player {
         senbonSakuraN = numberOfSenbonsakura;
         infoOffset = _infoOffset;
         playerNumber = _playerNumber;
+        width = _width;
     }
 
     public int getX() {
@@ -114,7 +115,7 @@ public abstract class Player {
         }
         else if(playerNumber == 2)
         {
-            g.fillRect(600, infoOffset, barWidth, 5);
+            g.fillRect(width-barWidth-100, infoOffset, barWidth, 5);
         }
     }
 }

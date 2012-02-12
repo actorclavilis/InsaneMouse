@@ -81,13 +81,13 @@ public class GUI extends JPanel implements ActionListener, EnemyDeletable
         
         players = new ArrayList(twoPlayerRB.isSelected()?2:1);
         if (mouseRB.isSelected()) {
-            MouseControlledPlayer p1 = new MouseControlledPlayer(width / 2, height / 2, 3, true, 10, this, 3, 1);
+            MouseControlledPlayer p1 = new MouseControlledPlayer(width / 2, height / 2, 3, true, 10, this, 3, 1, width);
             addMouseMotionListener(p1);
             addMouseListener(p1);
             players.add(p1);
         } else {
             KeyboardControlledPlayer p1 =
-                    new KeyboardControlledPlayer(width / 2, height / 2, 3, true, 10, this, 3, KeyEvent.VK_W, KeyEvent.VK_A, KeyEvent.VK_S, KeyEvent.VK_D, keyboardSpeedS.getValue(), KeyEvent.VK_SPACE, 1);
+                    new KeyboardControlledPlayer(width / 2, height / 2, 3, true, 10, this, 3, KeyEvent.VK_W, KeyEvent.VK_A, KeyEvent.VK_S, KeyEvent.VK_D, keyboardSpeedS.getValue(), KeyEvent.VK_SPACE, 1, width);
             KeyboardFocusManager.getCurrentKeyboardFocusManager().addKeyEventDispatcher(p1);
             players.add(p1);
         }
@@ -95,14 +95,14 @@ public class GUI extends JPanel implements ActionListener, EnemyDeletable
         if(twoPlayerRB.isSelected()){
             if (mouseRB.isSelected()) {
                 KeyboardControlledPlayer p2 =
-                    new KeyboardControlledPlayer(width / 2, height / 2, 3, true, 10, this, 3, KeyEvent.VK_W, KeyEvent.VK_A, KeyEvent.VK_S, KeyEvent.VK_D, keyboardSpeedS.getValue(), KeyEvent.VK_SPACE, 2);
+                    new KeyboardControlledPlayer(width / 2, height / 2, 3, true, 10, this, 3, KeyEvent.VK_W, KeyEvent.VK_A, KeyEvent.VK_S, KeyEvent.VK_D, keyboardSpeedS.getValue(), KeyEvent.VK_SPACE, 2, width);
                 KeyboardFocusManager.getCurrentKeyboardFocusManager().addKeyEventDispatcher(p2);
                 players.add(p2);
             }
             else
             {
                 KeyboardControlledPlayer p2 =
-                        new KeyboardControlledPlayer(width / 2, height / 2, 3, true, 10, this, 3, KeyEvent.VK_NUMPAD8, KeyEvent.VK_NUMPAD4, KeyEvent.VK_NUMPAD5, KeyEvent.VK_NUMPAD6, keyboardSpeedS.getValue(), KeyEvent.VK_NUMPAD0, 2);
+                        new KeyboardControlledPlayer(width / 2, height / 2, 3, true, 10, this, 3, KeyEvent.VK_NUMPAD8, KeyEvent.VK_NUMPAD4, KeyEvent.VK_NUMPAD5, KeyEvent.VK_NUMPAD6, keyboardSpeedS.getValue(), KeyEvent.VK_NUMPAD0, 2, width);
                 KeyboardFocusManager.getCurrentKeyboardFocusManager().addKeyEventDispatcher(p2);
                 players.add(p2);
             }
