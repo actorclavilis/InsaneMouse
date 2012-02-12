@@ -245,7 +245,7 @@ public final class EnemyTypes
                 while (i.hasNext()) {
                     Player p = (Player) i.next();
                     d = distanceFrom(p.getX(), p.getY());
-                    if (d > dx) {
+                    if (d < dx) {
                         dx = d;
                         pm = p;
                     }
