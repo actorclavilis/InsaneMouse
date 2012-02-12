@@ -23,8 +23,10 @@ public abstract class Player {
     private int senbonSakuraC;
     private long senbonSakuraT = 0;
     protected int infoOffset;
+    protected int playerNumber;
+    protected int width;
 
-    public Player(int _x, int _y, int numberOfLives, boolean startActive, int numberOfSenbonsakura, EnemyDeletable _parent, int _infoOffset) {
+    public Player(int _x, int _y, int numberOfLives, boolean startActive, int numberOfSenbonsakura, EnemyDeletable _parent, int _infoOffset, int _playerNumber, int _width) {
         lives = numberOfLives;
         isActive = startActive;
         x = _x;
@@ -32,6 +34,7 @@ public abstract class Player {
         parent = _parent;
         senbonSakuraN = numberOfSenbonsakura;
         infoOffset = _infoOffset;
+        playerNumber = _playerNumber;
     }
 
     public int getX() {
@@ -45,7 +48,7 @@ public abstract class Player {
     public int getLives() {
         return lives;
     }
-    
+       
     public void setImmunity(boolean _hasImmunity)
     {
         hasImmunity = _hasImmunity;
@@ -105,6 +108,13 @@ public abstract class Player {
         int barWidth = (int)Math.min(SENBONSAKURA_TIMEOUT, System.currentTimeMillis()-senbonSakuraT);
         barWidth *=.05;
         g.setColor(Color.PINK);
-        g.fillRect(100, infoOffset, barWidth, 5);
+        if(playerNumber == 1)
+        {
+            g.fillRect(100, infoOffset, barWidth, 5);
+        }
+        else if(playerNumber == 2)
+        {
+            g.fillRect(600, infoOffset, barWidth, 5);
+        }
     }
 }
