@@ -21,9 +21,7 @@ class MP3
 
     public void play() 
     {     
-        Thread t = new Thread() 
-        {
-            @Override
+        Thread t = new Thread() {
             public void run() 
             {
                 while(true)
