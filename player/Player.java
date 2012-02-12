@@ -10,7 +10,8 @@ public abstract class Player {
     private static final int 
             SENBONSAKURA_RADIUS = 250, 
             SENBONSAKURA_SQUARE = SENBONSAKURA_RADIUS*SENBONSAKURA_RADIUS,
-            IMMUNITY_LIFETIME = 2000;
+            IMMUNITY_LIFETIME = 2000,
+            SENBONSAKURA_TIMEOUT = 5000;
     protected int lives;
     protected boolean isActive;
     protected boolean hasImmunity;
@@ -20,6 +21,7 @@ public abstract class Player {
     protected EnemyDeletable parent;
     private int senbonSakuraN;
     private int senbonSakuraC;
+    private long senbonSakuraT = Long.MAX_VALUE;
 
     public Player(int _x, int _y, int numberOfLives, boolean startActive, int numberOfSenbonsakura, EnemyDeletable _parent) {
         lives = numberOfLives;
@@ -78,8 +80,16 @@ public abstract class Player {
     public abstract void move();
 
     protected void senbonSakura() {
-        if (senbonSakuraN-- > 0) {
+        if ((System.currentTimeMillis() - senbonSakuraT)>SENBONSAKURA_TIMEOUT && senbonSakuraN-- > 0) {
             senbonSakuraC = 40;
+            parent.deleteIf(new EnemyPredicate() {
+                public boolean satisfiedBy(Enemy e) {
+                    float p1 = (x + 5) - e.getX();
+                    float p2 = (y + 5) - e.getY();
+                    return (p1*p1 + p2*p2) < SENBONSAKURA_SQUARE;
+                }
+            });
+            senbonSakuraT = System.currentTimeMillis();
         }
     }
 
@@ -89,13 +99,6 @@ public abstract class Player {
         if (senbonSakuraC-->0) {
             g.setColor(Color.PINK);
             g.fillOval(x-SENBONSAKURA_RADIUS/2, y-SENBONSAKURA_RADIUS/2, SENBONSAKURA_RADIUS, SENBONSAKURA_RADIUS);
-            parent.deleteIf(new EnemyPredicate() {
-                public boolean satisfiedBy(Enemy e) {
-                    float p1 = (x + 5) - e.getX();
-                    float p2 = (y + 5) - e.getY();
-                    return (p1*p1 + p2*p2) < SENBONSAKURA_SQUARE;
-                }
-            });
-        }
+        }  
     }
 }
