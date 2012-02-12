@@ -209,11 +209,17 @@ public class GUI extends JPanel implements ActionListener, EnemyDeletable
     }
     
     private void audioSetup() {
-        try {
-            if(mp3 == null)
-                mp3 = new MP3();
-        } catch (Exception e) {}
-        mp3.play();
+        if(musicCB.isSelected())
+        {
+            try 
+            {
+                if(mp3 == null)
+                {
+                    mp3 = new MP3();
+                }
+            } catch (Exception e) {}
+            mp3.play();
+        }
     }
     
     private void setup()
@@ -568,7 +574,10 @@ public class GUI extends JPanel implements ActionListener, EnemyDeletable
                                 highscore = score;
                                 highscoreL.setText(String.valueOf(highscore));
                             }
-                            mp3.stop();
+                            if(musicCB.isSelected())
+                            {
+                                mp3.stop();
+                            }
                             break;
                         } 
                         

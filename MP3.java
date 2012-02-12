@@ -5,10 +5,12 @@ import javazoom.jl.player.*;
 class MP3 
 {
     private Player player; 
-    private final BufferedInputStream bis = new BufferedInputStream(new FileInputStream("Tonic.mp3"));
-    
+    private Thread t;
+    private boolean play;
+
     public MP3() throws Exception
-    {    
+    {   
+        play = false;
     }
     
     public void stop() 
@@ -17,19 +19,30 @@ class MP3
         {
             player.close();
         } 
+        play = false;
+        try
+        {
+            t.wait();
+        }catch(Exception e)
+        {}
+        t = null;
+        player = null;
     }
 
     public void play() 
     {     
-        Thread t = new Thread() {
+        play = true;
+        t = new Thread() {
             public void run() 
             {
                 while(true)
                 {
-                    if((player == null)||(player.isComplete()))
-                    {
+                    if(((player == null)||(player.isComplete()))&&(play))
+                    {                       
                         try 
-                        {                           
+                        {   
+                            FileInputStream fi = new FileInputStream("Tonic.mp3");
+                            BufferedInputStream bis = new BufferedInputStream(fi);
                             player = new Player(bis); 
                             player.play(); 
                         }
