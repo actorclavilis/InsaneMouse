@@ -12,8 +12,8 @@ import util.*;
  * @author harrison
  */
 public class MouseControlledPlayer extends Player implements MouseMotionListener, MouseListener {
-    public MouseControlledPlayer(int _x, int _y, int _lives, boolean _active, int _sbsk, EnemyDeletable _parent) {
-        super(_x, _y, _lives, _active, _sbsk, _parent);
+    public MouseControlledPlayer(int _x, int _y, int _lives, boolean _active, int _sbsk, EnemyDeletable _parent, int _infoOffset) {
+        super(_x, _y, _lives, _active, _sbsk, _parent, _infoOffset);
     }
 
     public void mouseDragged(MouseEvent e) {

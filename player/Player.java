@@ -22,14 +22,16 @@ public abstract class Player {
     private int senbonSakuraN;
     private int senbonSakuraC;
     private long senbonSakuraT = Long.MAX_VALUE;
+    protected int infoOffset;
 
-    public Player(int _x, int _y, int numberOfLives, boolean startActive, int numberOfSenbonsakura, EnemyDeletable _parent) {
+    public Player(int _x, int _y, int numberOfLives, boolean startActive, int numberOfSenbonsakura, EnemyDeletable _parent, int _infoOffset) {
         lives = numberOfLives;
         isActive = startActive;
         x = _x;
         y = _y;
         parent = _parent;
         senbonSakuraN = numberOfSenbonsakura;
+        infoOffset = _infoOffset;
     }
 
     public int getX() {
@@ -99,6 +101,10 @@ public abstract class Player {
         if (senbonSakuraC-->0) {
             g.setColor(Color.PINK);
             g.fillOval(x-SENBONSAKURA_RADIUS/2, y-SENBONSAKURA_RADIUS/2, SENBONSAKURA_RADIUS, SENBONSAKURA_RADIUS);
-        }  
+        }
+        int barWidth = (int)Math.max(SENBONSAKURA_TIMEOUT, System.currentTimeMillis()-senbonSakuraT);
+        barWidth *=.05;
+        g.setColor(Color.PINK);
+        g.fillRect(100, infoOffset, barWidth, 5);
     }
 }

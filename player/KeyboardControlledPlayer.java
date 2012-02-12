@@ -17,10 +17,10 @@ public class KeyboardControlledPlayer extends Player implements KeyEventDispatch
     private boolean mUp = false, mLeft = false, mDown = false, mRight = false;
     
     public KeyboardControlledPlayer(int _x, int _y, int _lives, boolean _active,
-                                    int _sbsk, EnemyDeletable _parent,
+                                    int _sbsk, EnemyDeletable _parent, int _infoOffset,
                                     int _up, int _left, int _down, int _right,
                                     int _speed, int _sbskey) {
-        super(_x, _y, _lives, _active, _sbsk, _parent);
+        super(_x, _y, _lives, _active, _sbsk, _parent, _infoOffset);
         up = _up; down = _down; left = _left; right = _right;
         speed = _speed;
         sbskey = _sbskey;
