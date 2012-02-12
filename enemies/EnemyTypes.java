@@ -31,12 +31,12 @@ public final class EnemyTypes
 
         public void move(List ps, float speedAdjust) 
         {
-            float dx = 0, d = 0; Player pm = null;
+            float dx = Float.MAX_VALUE, d = 0; Player pm = null;
             Iterator i = ps.iterator();
             while(i.hasNext()) {
                 Player p = (Player)i.next();
                 d = distanceFrom(p.getX(), p.getY());
-                if(d>dx) {
+                if(d<dx) {
                     dx = d;
                     pm = p;
                 }
@@ -89,12 +89,12 @@ public final class EnemyTypes
 
         public void move(List ps, float speedAdjust) 
         {
-            float dx = 0, d = 0; Player pm = null;
+            float dx = Float.MAX_VALUE, d = 0; Player pm = null;
             Iterator i = ps.iterator();
             while(i.hasNext()) {
                 Player p = (Player)i.next();
                 d = distanceFrom(p.getX(), p.getY());
-                if(d>dx) {
+                if(d<dx) {
                     dx = d;
                     pm = p;
                 }
