@@ -1,17 +1,9 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package player;
 
 import java.awt.KeyEventDispatcher;
 import java.awt.event.KeyEvent;
 import util.EnemyDeletable;
 
-/**
- *
- * @author harrison
- */
 public class KeyboardControlledPlayer extends Player implements KeyEventDispatcher {
     private int up, left, down, right, sbskey;
     private float speed;
