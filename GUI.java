@@ -9,6 +9,7 @@ import java.util.Set;
 import java.awt.image.*;
 import enemies.*;
 import java.util.ArrayList;
+import java.util.Arrays;
 import util.*;
 
 public class GUI extends JPanel implements ActionListener, EnemyDeletable
@@ -25,7 +26,7 @@ public class GUI extends JPanel implements ActionListener, EnemyDeletable
     private int ballN, monsterN, counterN, randomN, rainN, bombN, monsterMultiplier;
     private int multiplier,highscore, score, level;
     private int invSpeed, defaultDistance, width, height, timeDifficulty1, distanceLimit;
-    private int[] borders;
+    private int[] borders, deathLocation;
     
     private long startTime, timeElapse, timeLast, timeCircle, timeCircleSwitch, programLoopCounter;
     
@@ -53,7 +54,7 @@ public class GUI extends JPanel implements ActionListener, EnemyDeletable
         highscore = 0;          
         width = this.getWidth();
         height = this.getHeight();
-        
+                     
         borders = new int[4];
         borders[0] = 15;
         borders[1] = 15;
@@ -226,6 +227,9 @@ public class GUI extends JPanel implements ActionListener, EnemyDeletable
     {
         playerSetup();
         
+        deathLocation = new int[4];
+        Arrays.fill(deathLocation, -1);
+        
         menu.setVisible(false);
         this.revalidate();
         
@@ -378,11 +382,32 @@ public class GUI extends JPanel implements ActionListener, EnemyDeletable
                 p.decLives(width / 2, height / 2);    
                 p.setImmunity(true);
             }                        
-            if(p.getLives() <= 0) {
-                g.drawLine(p.getX()-15, p.getY()-15, p.getX()+15, p.getY()+15);
-                g.drawLine(p.getX()+15, p.getY()-15, p.getX()-15, p.getY()+15);
+            if(p.getLives() <= 0) 
+            {                
+                i.remove();
+                for(int h = 0; h < 4; h++)
+                {
+                    if(deathLocation[h] == -1)
+                    {
+                        deathLocation[h] = p.getX();
+                        deathLocation[h+1] = p.getY();
+                        break;
+                    }
+                }
             }
         }
+        
+        if((deathLocation[0] != -1)&&(deathLocation[1] != -1))
+        {
+            g.drawLine(deathLocation[0]-15, deathLocation[1]-15, deathLocation[0]+15, deathLocation[1]+15);
+            g.drawLine(deathLocation[0]+15, deathLocation[1]-15, deathLocation[0]-15, deathLocation[1]+15);
+        }
+        if((deathLocation[2] != -1)&&(deathLocation[3] != -1))
+        {
+            g.drawLine(deathLocation[2]-15, deathLocation[3]-15, deathLocation[2]+15, deathLocation[3]+15);
+            g.drawLine(deathLocation[2]+15, deathLocation[3]-15, deathLocation[2]-15, deathLocation[3]+15);
+        }
+        
         if(!onePlayerAlive) {
             Font old = g.getFont();
             g.setColor(Color.red.darker());

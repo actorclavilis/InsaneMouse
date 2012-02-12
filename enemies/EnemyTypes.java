@@ -240,14 +240,12 @@ public final class EnemyTypes
             if (existant) {
                 super.move(ps, speedAdjust);
                 float dx = Float.MAX_VALUE, d = 0;
-                Player pm = null;
                 Iterator i = ps.iterator();
                 while (i.hasNext()) {
                     Player p = (Player) i.next();
                     d = distanceFrom(p.getX(), p.getY());
                     if (d < dx) {
                         dx = d;
-                        pm = p;
                     }
                 }
                 if (dx < 8000) {
