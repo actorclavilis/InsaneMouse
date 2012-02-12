@@ -38,6 +38,7 @@ public class GUI extends JPanel implements ActionListener, EnemyDeletable
     private java.util.List players;
     private Thread t, r;   
     private scbClass scbInstance = new scbClass();
+    private MP3 mp3;
     
     public GUI(Dimension a) throws Exception
     {                   
@@ -203,12 +204,22 @@ public class GUI extends JPanel implements ActionListener, EnemyDeletable
         this.add(back);
     }
     
+    private void audioSetup() {
+        try {
+            if(mp3 == null)
+                mp3 = new MP3();
+        } catch (Exception e) {}
+        mp3.play();
+    }
+    
     private void setup()
     {
         playerSetup();
         
         menu.setVisible(false);
         this.revalidate();
+        
+        audioSetup();
         
         Iterator i = players.iterator();
         Player p;
@@ -548,6 +559,7 @@ public class GUI extends JPanel implements ActionListener, EnemyDeletable
                                 highscore = score;
                                 highscoreL.setText(String.valueOf(highscore));
                             }
+                            mp3.stop();
                             break;
                         } 
                         
