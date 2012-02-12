@@ -239,7 +239,7 @@ public final class EnemyTypes
         public void move(List ps, float speedAdjust) {
             if (existant) {
                 super.move(ps, speedAdjust);
-                float dx = 0, d = 0;
+                float dx = Float.MAX_VALUE, d = 0;
                 Player pm = null;
                 Iterator i = ps.iterator();
                 while (i.hasNext()) {
