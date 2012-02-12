@@ -1,11 +1,12 @@
 package player;
 
 import java.awt.event.*;
+import javax.swing.SwingUtilities;
 import util.*;
 
 public class MouseControlledPlayer extends Player implements MouseMotionListener, MouseListener {
-    public MouseControlledPlayer(int _x, int _y, int _lives, boolean _active, int _sbsk, EnemyDeletable _parent, int _infoOffset, int _playerNumber, int _width) {
-        super(_x, _y, _lives, _active, _sbsk, _parent, _infoOffset, _playerNumber, _width);
+    public MouseControlledPlayer(int _x, int _y, int _lives, boolean _active, EnemyDeletable _parent, int _infoOffset, int _playerNumber, int _width) {
+        super(_x, _y, _lives, _active, _parent, _infoOffset, _playerNumber, _width);
     }
 
     public void mouseDragged(MouseEvent e) {
@@ -27,7 +28,14 @@ public class MouseControlledPlayer extends Player implements MouseMotionListener
     public void mouseClicked(MouseEvent e) {}
 
     public void mousePressed(MouseEvent e) {
-        this.senbonSakura();
+        if(SwingUtilities.isLeftMouseButton(e))
+        {
+            this.senbonSakura(false);
+        }
+        if(SwingUtilities.isRightMouseButton(e))
+        {
+            this.senbonSakura(true);
+        }
         e.consume();
     }
 
