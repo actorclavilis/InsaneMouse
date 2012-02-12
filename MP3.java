@@ -1,4 +1,3 @@
-package insanemouse;
 
 import java.io.BufferedInputStream;
 import java.io.FileInputStream;
