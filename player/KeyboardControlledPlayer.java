@@ -13,7 +13,8 @@ import util.EnemyDeletable;
  * @author harrison
  */
 public class KeyboardControlledPlayer extends Player implements KeyEventDispatcher {
-    private int up, left, down, right, speed, sbskey;
+    private int up, left, down, right, sbskey;
+    private float speed;
     private boolean mUp = false, mLeft = false, mDown = false, mRight = false;
     
     public KeyboardControlledPlayer(int _x, int _y, int _lives, boolean _active,
@@ -22,7 +23,7 @@ public class KeyboardControlledPlayer extends Player implements KeyEventDispatch
                                     int _speed, int _sbskey) {
         super(_x, _y, _lives, _active, _sbsk, _parent);
         up = _up; down = _down; left = _left; right = _right;
-        speed = _speed;
+        speed = (float)_speed/100;
         sbskey = _sbskey;
     }
 
@@ -55,19 +56,19 @@ public class KeyboardControlledPlayer extends Player implements KeyEventDispatch
     public void move() {
         if(mRight)
         {
-            x++;
+            x += speed;
         }
         if(mLeft)
         {
-            x--;
+            x -= speed;
         }
         if(mDown)
         {
-            y++;
+            y += speed;
         }
         if(mUp)
         {
-            y--;
+            y -= speed;
         }
     }
 }
