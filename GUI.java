@@ -86,7 +86,7 @@ public class GUI extends JPanel implements ActionListener, EnemyDeletable
         }
         else {
             KeyboardControlledPlayer p1 = 
-                new KeyboardControlledPlayer(width/2, height/2, 3, true, 10, this, KeyEvent.VK_W, KeyEvent.VK_A, KeyEvent.VK_S, KeyEvent.VK_D, this.invSpeed, KeyEvent.VK_SPACE);
+                new KeyboardControlledPlayer(width/2, height/2, 3, true, 10, this, KeyEvent.VK_W, KeyEvent.VK_A, KeyEvent.VK_S, KeyEvent.VK_D, keyboardSpeedS.getValue(), KeyEvent.VK_SPACE);
             KeyboardFocusManager.getCurrentKeyboardFocusManager().addKeyEventDispatcher(p1);
             players.add(p1);
         }
@@ -99,19 +99,24 @@ public class GUI extends JPanel implements ActionListener, EnemyDeletable
         menu.setLayout(null);
         menu.setBounds(0, 0, width, height);   
         
-        JLabel title = new JLabel("INSANE MOUSE");
-        title.setBackground(Color.darkGray);
-        title.setBounds((width/2)-50, (height/2)-250, 600, 100);
+        JLabel specialTitle = new JLabel("I                  M");
+        specialTitle.setFont(new Font("sansserif", 3, 32));
+        specialTitle.setBounds((width/2)-140, (height/2)-250, 600, 100);
+        specialTitle.setForeground(Color.RED.brighter());
+        
+        JLabel title = new JLabel("  NSANE        OUSE");
+        title.setFont(new Font("sansserif", 3, 32));
+        title.setBounds((width/2)-140, (height/2)-250, 600, 100);
         title.setForeground(Color.white);
         
         JLabel author = new JLabel("By SJ and HH");
         author.setBackground(Color.darkGray);
-        author.setBounds((width/2)-40, (height/2)-200, 500, 100);
+        author.setBounds((width/2)-50, (height/2)-200, 500, 100);
         author.setForeground(Color.white);
         
-        highscoreL = new JLabel(String.valueOf(highscore));
+        highscoreL = new JLabel("Highscore:   " + String.valueOf(highscore));
         highscoreL.setBackground(Color.darkGray);
-        highscoreL.setBounds((width/2)-40, (height/2)+200, 500, 100);
+        highscoreL.setBounds((width/2)-113, (height/2)+130, 500, 100);
         highscoreL.setForeground(Color.white);
         
         easy = new JButton("Easy");
@@ -127,7 +132,7 @@ public class GUI extends JPanel implements ActionListener, EnemyDeletable
         twoPlayerRB = new JRadioButton("Two Player");
         mouseRB = new JRadioButton("Mouse (Player 1)");
         keyboardRB = new JRadioButton("Keyboard (Player 1)");
-        keyboardSpeedS = new JSlider(JSlider.HORIZONTAL, 0, 150, 50);
+        keyboardSpeedS = new JSlider(JSlider.HORIZONTAL, 10, 150, 50);
         musicCB = new JCheckBox("Music");
         
         onePlayerRB.setBackground(Color.darkGray);
@@ -158,10 +163,15 @@ public class GUI extends JPanel implements ActionListener, EnemyDeletable
         twoPlayerRB.setBounds((width/2)+100, (height/2)-30, 100, 20);
         mouseRB.setBounds((width/2)+100, (height/2), 200, 20);
         keyboardRB.setBounds((width/2)+100, (height/2)+20, 200, 20);
-        keyboardSpeedS.setBounds(width/2+200, height/2, 200, 50);
+        keyboardSpeedS.setBounds(width/2-120, height/2+100, 200, 50);
         musicCB.setBounds((width/2)+100, (height/2)+50, 100, 20);
+ 
+        JLabel keyboardSpeedL = new JLabel("Keyboard Speed");
+        keyboardSpeedL.setForeground(Color.WHITE);
+        keyboardSpeedL.setBounds(width/2-113, height/2+70, 200, 50);
         
         menu.add(title);
+        menu.add(specialTitle);
         menu.add(author);
         menu.add(easy);
         menu.add(hard);
@@ -170,6 +180,7 @@ public class GUI extends JPanel implements ActionListener, EnemyDeletable
         menu.add(twoPlayerRB);
         menu.add(mouseRB);
         menu.add(keyboardRB);
+        menu.add(keyboardSpeedL);
         menu.add(keyboardSpeedS);
         menu.add(musicCB);    
         

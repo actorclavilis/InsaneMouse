@@ -15,13 +15,13 @@ public abstract class Player {
     protected boolean isActive;
     protected boolean hasImmunity;
     protected long lastImmunity;
-    protected int x;
-    protected int y;
+    protected float x;
+    protected float y;
     protected EnemyDeletable parent;
     private int senbonSakuraN;
     private int senbonSakuraC;
 
-    public Player(int _x, int _y, int numberOfLives, boolean startActive, int numberOfSenbonsakura, EnemyDeletable _parent) {
+    public Player(float _x, float _y, int numberOfLives, boolean startActive, int numberOfSenbonsakura, EnemyDeletable _parent) {
         lives = numberOfLives;
         isActive = startActive;
         x = _x;
@@ -31,11 +31,11 @@ public abstract class Player {
     }
 
     public int getX() {
-        return x;
+        return (int)x;
     }
 
     public int getY() {
-        return y;
+        return (int)y;
     }
 
     public int getLives() {
@@ -61,7 +61,7 @@ public abstract class Player {
         lives = _lives;
     }
 
-    public void decLives(int _x, int _y) {
+    public void decLives(float _x, float _y) {
         lives--;
         x = _x;
         y = _y;
@@ -85,10 +85,10 @@ public abstract class Player {
 
     public void paint(Graphics g) {
         g.setColor(Color.WHITE);
-        g.fillOval(x - 5, y - 5, 10, 10);
+        g.fillOval((int)x - 5, (int)y - 5, 10, 10);
         if (senbonSakuraC-->0) {
             g.setColor(Color.PINK);
-            g.fillOval(x-SENBONSAKURA_RADIUS/2, y-SENBONSAKURA_RADIUS/2, SENBONSAKURA_RADIUS, SENBONSAKURA_RADIUS);
+            g.fillOval((int)x-SENBONSAKURA_RADIUS/2, (int)y-SENBONSAKURA_RADIUS/2, SENBONSAKURA_RADIUS, SENBONSAKURA_RADIUS);
             parent.deleteIf(new EnemyPredicate() {
                 public boolean satisfiedBy(Enemy e) {
                     float p1 = (x + 5) - e.getX();
