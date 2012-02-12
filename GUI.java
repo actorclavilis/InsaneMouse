@@ -763,7 +763,7 @@ public class GUI extends JPanel implements ActionListener, EnemyDeletable
                     Iterator j = players.iterator();
                     while(j.hasNext()) {
                         Player p = (Player)j.next();
-                        e.move(p.getX(), p.getY(), programSpeedAdjust/*/players.size()*/);
+                        e.move(players, programSpeedAdjust/*/players.size()*/);
                         if((e.collidesWith(p.getX(), p.getY()))&&(!p.getImmunity())) {
                             p.decLives(p.getX(), p.getY());
                             p.setImmunity(true);

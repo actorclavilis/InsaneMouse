@@ -2,8 +2,11 @@ package enemies;
 
 import javax.swing.*;
 import java.awt.*;
+import java.util.List;
+import java.util.Iterator;
 import java.util.Set;
 import util.SetCallback;
+import player.Player;
 
 public final class EnemyTypes 
 {
@@ -26,12 +29,23 @@ public final class EnemyTypes
             invSpeed = _invSpeed;
         }
 
-        public void move(int mx, int my, float speedAdjust) 
+        public void move(List ps, float speedAdjust) 
         {
+            float dx = 0, d = 0; Player pm = null;
+            Iterator i = ps.iterator();
+            while(i.hasNext()) {
+                Player p = (Player)i.next();
+                d = distanceFrom(p.getX(), p.getY());
+                if(d>dx) {
+                    dx = d;
+                    pm = p;
+                }
+            }
+            
             int directionX = 1;
             int directionY = 1;
-            float p1 = (my - 5) - y;
-            float p2 = (mx - 5) - x;
+            float p1 = (pm.getY() - 5) - y;
+            float p2 = (pm.getX() - 5) - x;
 
             if(p1 < 0) 
             {
@@ -44,7 +58,6 @@ public final class EnemyTypes
             }
 
             float angle = (float) Math.atan(p1 / p2);
-            float dx = (float)Math.pow(p2, 2) + (float)Math.pow(p1, 2);
             float deltaD = dx/invSpeed;
             float deltaX = deltaD * (float) Math.abs(Math.cos(angle)) * directionX;
             float deltaY = deltaD * (float) Math.abs(Math.sin(angle)) * directionY;
@@ -74,17 +87,29 @@ public final class EnemyTypes
             speed = _speed;
         }
 
-        public void move(int mx, int my, float speedAdjust) 
+        public void move(List ps, float speedAdjust) 
         {
+            float dx = 0, d = 0; Player pm = null;
+            Iterator i = ps.iterator();
+            while(i.hasNext()) {
+                Player p = (Player)i.next();
+                d = distanceFrom(p.getX(), p.getY());
+                if(d>dx) {
+                    dx = d;
+                    pm = p;
+                }
+            }
+            
             int directionX = 1;
             int directionY = 1;
-            float p1 = (my - 5) - y;
-            float p2 = (mx - 5) - x;
+            float p1 = (pm.getY() - 5) - y;
+            float p2 = (pm.getX() - 5) - x;
 
             if(p1 < 0) 
             {
                 directionY = -1;
             }
+            
             if(p2 < 0) 
             {
                 directionX = -1;
@@ -127,7 +152,7 @@ public final class EnemyTypes
             this(_x, _y, 4, null);
         }
 
-        public void move(int mx, int my, float speedAdjust)
+        public void move(List ps, float speedAdjust)
         {     
             if(x > borders[2])
             {                
@@ -183,7 +208,7 @@ public final class EnemyTypes
             this(_x, _y, (float)2.4, _floor);
         }
 
-        public void move(int mx, int my, float speedAdjust) 
+        public void move(List ps, float speedAdjust) 
         {
             x += vx*speedAdjust*0.2;
             y += vy*speedAdjust*0.2;
@@ -211,11 +236,22 @@ public final class EnemyTypes
             borders = _borders;
         }
         
-        public void move(int mx, int my, float speedAdjust) {
-            if(existant) {
-                super.move(mx, my, speedAdjust);
-                if(distanceFrom(mx, my) < 8000) {
-                    for (int i = 0; i < PIECES; i++) {
+        public void move(List ps, float speedAdjust) {
+            if (existant) {
+                super.move(ps, speedAdjust);
+                float dx = 0, d = 0;
+                Player pm = null;
+                Iterator i = ps.iterator();
+                while (i.hasNext()) {
+                    Player p = (Player) i.next();
+                    d = distanceFrom(p.getX(), p.getY());
+                    if (d > dx) {
+                        dx = d;
+                        pm = p;
+                    }
+                }
+                if (d < 8000) {
+                    for (int j = 0; j < PIECES; j++) {
                         mod.add(new Shrapnel(x, y, speed, borders));
                     }
                     existant = false;

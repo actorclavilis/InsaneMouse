@@ -1,6 +1,7 @@
 package enemies;
 
 import java.awt.*;
+import java.util.*;
 
 public abstract class Enemy 
 {
@@ -27,7 +28,7 @@ public abstract class Enemy
             return Color.WHITE;
 	}
 	
-	public abstract void move(int mx, int my, float speedAdjust);
+	public abstract void move(java.util.List ps, float speedAdjust);
 	
 	protected float distanceFrom(float mx, float my)
         {
