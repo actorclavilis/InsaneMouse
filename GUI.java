@@ -25,7 +25,7 @@ public class GUI extends JPanel implements ActionListener, EnemyDeletable
     
     private int ballN, monsterN, counterN, randomN, rainN, bombN, monsterMultiplier;
     private int multiplier,highscore, score, level;
-    private int invSpeed, defaultDistance, width, height, timeDifficulty1, distanceLimit;
+    private int invSpeed, width, height, timeDifficulty1, distanceLimit;
     private int[] borders, deathLocation;
     
     private long startTime, timeElapse, timeLast, timeCircle, timeCircleSwitch, programLoopCounter;
@@ -33,7 +33,7 @@ public class GUI extends JPanel implements ActionListener, EnemyDeletable
     private boolean countdownF, spawnCircleB, spawnMonsterB, spawnRandomersB, spawnRainB;
     private boolean circular, spawnIncrease, onePlayerAlive;
     
-    private float distance, programSpeedAdjust;
+    private float distance, defaultDistance, programSpeedAdjust;
     
     private Set enemies;
     private java.util.List players;
@@ -66,19 +66,6 @@ public class GUI extends JPanel implements ActionListener, EnemyDeletable
     }
 
     private void playerSetup() {
-        if (players != null) {
-            Iterator i = players.iterator();
-            while (i.hasNext()) {
-                Player p = (Player) i.next();
-                if (p instanceof MouseControlledPlayer) {
-                    MouseControlledPlayer m = (MouseControlledPlayer) p;
-                    removeMouseListener(m);
-                    removeMouseMotionListener(m);
-                } else if (p instanceof KeyboardControlledPlayer) {
-                    KeyboardFocusManager.getCurrentKeyboardFocusManager().removeKeyEventDispatcher((KeyboardControlledPlayer) p);
-                }
-            }
-        }
         
         players = new ArrayList(twoPlayerRB.isSelected()?2:1);
         if (mouseRB.isSelected()) {
@@ -294,48 +281,37 @@ public class GUI extends JPanel implements ActionListener, EnemyDeletable
                 distance = 600;
                 monsterN = 0;
                 randomN = 0;
-                rainN = 40;
+                rainN = 30;
                 defaultDistance = 600;
-                timeLast = 20000;
+                timeLast = 10000;
                 spawnCircleB = true;    
                 break;
             case 2:
                 distance = 600;
                 monsterN = 0;
-                randomN = 40;
-                rainN = 10;
+                randomN = 30;
+                rainN = 30;
                 defaultDistance = 600;
-                timeLast += 20000;
+                timeLast += 10000;
                 spawnCircleB = true;
                 break;
             case 3:
                 distance = 600;
-                monsterN = 40;
+                monsterN = 30;
                 randomN = 0;
                 rainN = 0;
                 defaultDistance = 600;
-                timeLast += 20000;
+                timeLast += 10000;
                 spawnCircleB = true;
                 break;
-            case 4:
-                distance = 400;
-                monsterN = 10;
-                randomN = 10;
-                rainN = 0;
-                defaultDistance = 400;
+            default:
+                distance = (float)(Math.random()*200+400-level*5);
+                monsterN = (int)(Math.random()*25+10+level);
+                randomN = (int)(Math.random()*25+10+level);
+                rainN = (int)(Math.random()*10+10+level);
+                defaultDistance = distance;
+                timeLast += 5000+level*1000;
                 spawnCircleB = true;
-                timeLast += 20000;
-                break;
-            case 5:
-                distance = 400;
-                monsterN = 15;
-                randomN = 15;
-                rainN = 20;
-                defaultDistance = 400;
-                spawnCircleB = true;
-                timeLast += 50000000;
-                level = 1;
-                break;
         }    
           
         monsterN *= monsterMultiplier;
@@ -383,7 +359,14 @@ public class GUI extends JPanel implements ActionListener, EnemyDeletable
                 p.setImmunity(true);
             }                        
             if(p.getLives() <= 0) 
-            {                
+            {         
+                if (p instanceof MouseControlledPlayer) {
+                    MouseControlledPlayer m = (MouseControlledPlayer) p;
+                    removeMouseListener(m);
+                    removeMouseMotionListener(m);
+                } else if (p instanceof KeyboardControlledPlayer) {
+                    KeyboardFocusManager.getCurrentKeyboardFocusManager().removeKeyEventDispatcher((KeyboardControlledPlayer) p);
+                }
                 i.remove();
                 for(int h = 0; h < 4; h++)
                 {
