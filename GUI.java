@@ -210,11 +210,9 @@ public class GUI extends JPanel implements ActionListener, EnemyDeletable
     
     private void audioSetup() {
         try {
-            mp3 = new MP3();
-        } catch (Exception e) {
-            e.printStackTrace();
-            System.exit(127);
-        }
+            if(mp3 == null)
+                mp3 = new MP3();
+        } catch (Exception e) {}
         mp3.play();
     }
     
