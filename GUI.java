@@ -79,29 +79,33 @@ public class GUI extends JPanel implements ActionListener, EnemyDeletable
             }
         }
         
-        if(!twoPlayerRB.isSelected()) {        
-            players = new ArrayList(1);
-            if(mouseRB.isSelected()) {
-                MouseControlledPlayer p1 = new MouseControlledPlayer(width / 2, height / 2, 3, true, 10, this, 3);
-                addMouseMotionListener(p1);
-                addMouseListener(p1);
-                players.add(p1);
-            } else {
-            KeyboardControlledPlayer p1 = 
-                new KeyboardControlledPlayer(width/2, height/2, 3, true, 10, this, 3, KeyEvent.VK_W, KeyEvent.VK_A, KeyEvent.VK_S, KeyEvent.VK_D, keyboardSpeedS.getValue(), KeyEvent.VK_SPACE);
-            KeyboardFocusManager.getCurrentKeyboardFocusManager().addKeyEventDispatcher(p1);
-            players.add(p1);
-            }
-        } else {
-            players = new ArrayList(2);
+        players = new ArrayList(twoPlayerRB.isSelected()?2:1);
+        if (mouseRB.isSelected()) {
             MouseControlledPlayer p1 = new MouseControlledPlayer(width / 2, height / 2, 3, true, 10, this, 3);
             addMouseMotionListener(p1);
             addMouseListener(p1);
             players.add(p1);
-            KeyboardControlledPlayer p2 =
+        } else {
+            KeyboardControlledPlayer p1 =
                     new KeyboardControlledPlayer(width / 2, height / 2, 3, true, 10, this, 3, KeyEvent.VK_W, KeyEvent.VK_A, KeyEvent.VK_S, KeyEvent.VK_D, keyboardSpeedS.getValue(), KeyEvent.VK_SPACE);
-            KeyboardFocusManager.getCurrentKeyboardFocusManager().addKeyEventDispatcher(p2);
-            players.add(p2);
+            KeyboardFocusManager.getCurrentKeyboardFocusManager().addKeyEventDispatcher(p1);
+            players.add(p1);
+        }
+        
+        if(twoPlayerRB.isSelected()){
+            if (mouseRB.isSelected()) {
+                KeyboardControlledPlayer p2 =
+                    new KeyboardControlledPlayer(width / 2, height / 2, 3, true, 10, this, 3, KeyEvent.VK_W, KeyEvent.VK_A, KeyEvent.VK_S, KeyEvent.VK_D, keyboardSpeedS.getValue(), KeyEvent.VK_SPACE);
+                KeyboardFocusManager.getCurrentKeyboardFocusManager().addKeyEventDispatcher(p2);
+                players.add(p2);
+            }
+            else
+            {
+                KeyboardControlledPlayer p2 =
+                        new KeyboardControlledPlayer(width / 2, height / 2, 3, true, 10, this, 3, KeyEvent.VK_NUMPAD8, KeyEvent.VK_NUMPAD4, KeyEvent.VK_NUMPAD5, KeyEvent.VK_NUMPAD6, keyboardSpeedS.getValue(), KeyEvent.VK_NUMPAD0);
+                KeyboardFocusManager.getCurrentKeyboardFocusManager().addKeyEventDispatcher(p2);
+                players.add(p2);
+            }
         }
     }
         
@@ -371,11 +375,16 @@ public class GUI extends JPanel implements ActionListener, EnemyDeletable
                 p.setImmunity(true);
             }                        
             if(p.getLives() <= 0) {
-                g.setColor(Color.red.darker());
-                g.drawString("GAME OVER", width/2-20, height/2);
                 g.drawLine(p.getX()-15, p.getY()-15, p.getX()+15, p.getY()+15);
                 g.drawLine(p.getX()+15, p.getY()-15, p.getX()-15, p.getY()+15);
             }
+        }
+        if(!onePlayerAlive) {
+            Font old = g.getFont();
+            g.setColor(Color.red.darker());
+            g.setFont(new Font("sansserif", Font.BOLD, 20));
+            g.drawString("GAME OVER", width/2-40, height/2);
+            g.setFont(old);
         }
     }
        
