@@ -250,7 +250,7 @@ public final class EnemyTypes
                         pm = p;
                     }
                 }
-                if (d < 8000) {
+                if (dx < 8000) {
                     for (int j = 0; j < PIECES; j++) {
                         mod.add(new Shrapnel(x, y, speed, borders));
                     }
