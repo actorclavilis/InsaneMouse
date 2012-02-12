@@ -20,6 +20,7 @@ public class GUI extends JPanel implements ActionListener, EnemyDeletable
     private JLabel highscoreL;
     private JRadioButton onePlayerRB, twoPlayerRB, mouseRB, keyboardRB;
     private JCheckBox musicCB;
+    private JSlider keyboardSpeedS;
     
     private int ballN, monsterN, counterN, randomN, rainN, bombN, monsterMultiplier;
     private int multiplier,highscore, score, level;
@@ -113,18 +114,21 @@ public class GUI extends JPanel implements ActionListener, EnemyDeletable
         twoPlayerRB = new JRadioButton("Two Player");
         mouseRB = new JRadioButton("Mouse (Player 1)");
         keyboardRB = new JRadioButton("Keyboard (Player 1)");
+        keyboardSpeedS = new JSlider(JSlider.HORIZONTAL, 0, 150, 50);
         musicCB = new JCheckBox("Music");
         
         onePlayerRB.setBackground(Color.darkGray);
         twoPlayerRB.setBackground(Color.darkGray);
         mouseRB.setBackground(Color.darkGray);
         keyboardRB.setBackground(Color.darkGray);
+        keyboardSpeedS.setBackground(Color.darkGray);              
         musicCB.setBackground(Color.darkGray);
         
         onePlayerRB.setForeground(Color.WHITE);
         twoPlayerRB.setForeground(Color.WHITE);
         mouseRB.setForeground(Color.WHITE);
         keyboardRB.setForeground(Color.WHITE);
+        keyboardSpeedS.setForeground(Color.WHITE);
         musicCB.setForeground(Color.WHITE);
         
         ButtonGroup playerChoice = new ButtonGroup();
@@ -141,6 +145,7 @@ public class GUI extends JPanel implements ActionListener, EnemyDeletable
         twoPlayerRB.setBounds((width/2)+100, (height/2)-30, 100, 20);
         mouseRB.setBounds((width/2)+100, (height/2), 200, 20);
         keyboardRB.setBounds((width/2)+100, (height/2)+20, 200, 20);
+        keyboardSpeedS.setBounds(width/2+200, height/2, 200, 50);
         musicCB.setBounds((width/2)+100, (height/2)+50, 100, 20);
         
         menu.add(title);
@@ -152,6 +157,7 @@ public class GUI extends JPanel implements ActionListener, EnemyDeletable
         menu.add(twoPlayerRB);
         menu.add(mouseRB);
         menu.add(keyboardRB);
+        menu.add(keyboardSpeedS);
         menu.add(musicCB);    
         
         back = new JButton("Back");
