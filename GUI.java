@@ -18,7 +18,7 @@ public class GUI extends JPanel implements ActionListener, EnemyDeletable
       
     private JPanel menu;
     private JButton easy, hard, back, howTo, howToBack;
-    private JLabel highscoreL, howToL;
+    private JLabel highscoreL, howToL, specialTitle, title, author, keyboardSpeedL1, keyboardSpeedL2;
     private JRadioButton onePlayerRB, twoPlayerRB, mouseRB, keyboardRB;
     private JCheckBox musicCB;
     private JSlider keyboardSpeedS1, keyboardSpeedS2;
@@ -104,17 +104,17 @@ public class GUI extends JPanel implements ActionListener, EnemyDeletable
         menu.setLayout(null);
         menu.setBounds(0, 0, width, height);   
         
-        JLabel specialTitle = new JLabel("I                  M");
+        specialTitle = new JLabel("I                  M");
         specialTitle.setFont(new Font("sansserif", 3, 32));
         specialTitle.setBounds((width/2)-140, (height/2)-250, 600, 100);
         specialTitle.setForeground(Color.RED.brighter());
         
-        JLabel title = new JLabel("  NSANE        OUSE");
+        title = new JLabel("  NSANE        OUSE");
         title.setFont(new Font("sansserif", 3, 32));
         title.setBounds((width/2)-140, (height/2)-250, 600, 100);
         title.setForeground(Color.white);
         
-        JLabel author = new JLabel("By SJ and HH");
+        author = new JLabel("By SJ and HH");
         author.setBackground(Color.darkGray);
         author.setBounds((width/2)-50, (height/2)-200, 500, 100);
         author.setForeground(Color.white);
@@ -137,8 +137,8 @@ public class GUI extends JPanel implements ActionListener, EnemyDeletable
         twoPlayerRB = new JRadioButton("Two Player");
         mouseRB = new JRadioButton("Mouse (Player 1)");
         keyboardRB = new JRadioButton("Keyboard (Player 1)");
-        keyboardSpeedS1 = new JSlider(JSlider.HORIZONTAL, 10, 150, 50);
-        keyboardSpeedS2 = new JSlider(JSlider.HORIZONTAL, 10, 150, 50);
+        keyboardSpeedS1 = new JSlider(JSlider.HORIZONTAL, 10, 300, 50);
+        keyboardSpeedS2 = new JSlider(JSlider.HORIZONTAL, 10, 300, 50);
         musicCB = new JCheckBox("Music");
         
         onePlayerRB.setBackground(Color.darkGray);
@@ -177,11 +177,11 @@ public class GUI extends JPanel implements ActionListener, EnemyDeletable
         keyboardSpeedS2.setBounds(width/2-120, height/2+183, 200, 50);
         musicCB.setBounds((width/2)+100, (height/2)+50, 100, 20);
  
-        JLabel keyboardSpeedL1 = new JLabel("Keyboard Speed (Player One)");
+        keyboardSpeedL1 = new JLabel("Keyboard Speed (Player One)");
         keyboardSpeedL1.setForeground(Color.WHITE);
         keyboardSpeedL1.setBounds(width/2-113, height/2+67, 200, 50);
         
-        JLabel keyboardSpeedL2 = new JLabel("Keyboard Speed (Player Two)");
+        keyboardSpeedL2 = new JLabel("Keyboard Speed (Player Two)");
         keyboardSpeedL2.setForeground(Color.WHITE);
         keyboardSpeedL2.setBounds(width/2-113, height/2+150, 200, 50);
         
@@ -872,21 +872,11 @@ public class GUI extends JPanel implements ActionListener, EnemyDeletable
         }
         else if(e.getSource() == howTo)
         {
-            menu.add(howToL);
-            menu.add(howToBack);
-            menu.setComponentZOrder(howToL, 0);
-            menu.setComponentZOrder(howToBack, 0);
+            menu.removeAll();
             
-            menu.remove(easy);
-            menu.remove(hard);
-            menu.remove(howTo);
-            menu.remove(onePlayerRB);
-            menu.remove(twoPlayerRB);
-            menu.remove(mouseRB);
-            menu.remove(keyboardRB);
-            menu.remove(keyboardSpeedS1);
-            menu.remove(keyboardSpeedS2);
-            menu.remove(musicCB);   
+            menu.add(howToBack);
+            menu.add(howToL);
+                       
             
             menu.revalidate();
             menu.repaint();         
@@ -896,6 +886,11 @@ public class GUI extends JPanel implements ActionListener, EnemyDeletable
             menu.remove(howToL);
             menu.remove(howToBack);
             
+            menu.add(specialTitle);
+            menu.add(title);
+            menu.add(author);
+            menu.add(keyboardSpeedL1);
+            menu.add(keyboardSpeedL2);
             menu.add(easy);
             menu.add(hard);
             menu.add(howTo);
