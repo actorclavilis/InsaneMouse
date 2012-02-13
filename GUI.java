@@ -17,11 +17,11 @@ public class GUI extends JPanel implements ActionListener, EnemyDeletable
     private Dimension d; 
       
     private JPanel menu;
-    private JButton easy, hard, back;
-    private JLabel highscoreL;
+    private JButton easy, hard, back, howTo, howToBack;
+    private JLabel highscoreL, howToL;
     private JRadioButton onePlayerRB, twoPlayerRB, mouseRB, keyboardRB;
     private JCheckBox musicCB;
-    private JSlider keyboardSpeedS;
+    private JSlider keyboardSpeedS1, keyboardSpeedS2;
     
     private int ballN, monsterN, counterN, randomN, rainN, bombN, monsterMultiplier;
     private int multiplier,highscore, score, level;
@@ -75,7 +75,7 @@ public class GUI extends JPanel implements ActionListener, EnemyDeletable
             players.add(p1);
         } else {
             KeyboardControlledPlayer p1 =
-                    new KeyboardControlledPlayer(width / 2, height / 2, 3, true, this, 3, KeyEvent.VK_W, KeyEvent.VK_A, KeyEvent.VK_S, KeyEvent.VK_D, keyboardSpeedS.getValue(), KeyEvent.VK_SPACE, KeyEvent.VK_F, 1, width);
+                    new KeyboardControlledPlayer(width / 2, height / 2, 3, true, this, 3, KeyEvent.VK_W, KeyEvent.VK_A, KeyEvent.VK_S, KeyEvent.VK_D, keyboardSpeedS1.getValue(), KeyEvent.VK_SPACE, KeyEvent.VK_F, 1, width);
             KeyboardFocusManager.getCurrentKeyboardFocusManager().addKeyEventDispatcher(p1);
             players.add(p1);
         }
@@ -83,14 +83,14 @@ public class GUI extends JPanel implements ActionListener, EnemyDeletable
         if(twoPlayerRB.isSelected()){
             if (mouseRB.isSelected()) {
                 KeyboardControlledPlayer p2 =
-                    new KeyboardControlledPlayer(width / 2, height / 2, 3, true, this, 3, KeyEvent.VK_W, KeyEvent.VK_A, KeyEvent.VK_S, KeyEvent.VK_D, keyboardSpeedS.getValue(), KeyEvent.VK_SPACE, KeyEvent.VK_F, 2, width);
+                    new KeyboardControlledPlayer(width / 2, height / 2, 3, true, this, 3, KeyEvent.VK_W, KeyEvent.VK_A, KeyEvent.VK_S, KeyEvent.VK_D, keyboardSpeedS2.getValue(), KeyEvent.VK_SPACE, KeyEvent.VK_F, 2, width);
                 KeyboardFocusManager.getCurrentKeyboardFocusManager().addKeyEventDispatcher(p2);
                 players.add(p2);
             }
             else
             {
                 KeyboardControlledPlayer p2 =
-                        new KeyboardControlledPlayer(width / 2, height / 2, 3, true, this, 3, KeyEvent.VK_NUMPAD8, KeyEvent.VK_NUMPAD4, KeyEvent.VK_NUMPAD5, KeyEvent.VK_NUMPAD6, keyboardSpeedS.getValue(), KeyEvent.VK_NUMPAD0, KeyEvent.VK_NUMPAD1, 2, width);
+                        new KeyboardControlledPlayer(width / 2, height / 2, 3, true, this, 3, KeyEvent.VK_NUMPAD8, KeyEvent.VK_NUMPAD4, KeyEvent.VK_NUMPAD5, KeyEvent.VK_NUMPAD6, keyboardSpeedS2.getValue(), KeyEvent.VK_NUMPAD0, KeyEvent.VK_NUMPAD1, 2, width);
                 KeyboardFocusManager.getCurrentKeyboardFocusManager().addKeyEventDispatcher(p2);
                 players.add(p2);
             }
@@ -121,7 +121,7 @@ public class GUI extends JPanel implements ActionListener, EnemyDeletable
         
         highscoreL = new JLabel("Highscore:   " + String.valueOf(highscore));
         highscoreL.setBackground(Color.darkGray);
-        highscoreL.setBounds((width/2)-113, (height/2)+130, 500, 100);
+        highscoreL.setBounds((width/2)+100, (height/2)+70, 500, 100);
         highscoreL.setForeground(Color.white);
         
         easy = new JButton("Easy");
@@ -130,28 +130,31 @@ public class GUI extends JPanel implements ActionListener, EnemyDeletable
         easy.addActionListener(this);
         hard.addActionListener(this);
         
-        easy.setBounds((width/2)-50, (height/2)-50, 100, 20);
-        hard.setBounds((width/2)-50, height/2, 100, 20);
+        easy.setBounds((width/2)-60, (height/2)-50, 120, 20);
+        hard.setBounds((width/2)-60, height/2-10, 120, 20);
         
         onePlayerRB = new JRadioButton("One Player");
         twoPlayerRB = new JRadioButton("Two Player");
         mouseRB = new JRadioButton("Mouse (Player 1)");
         keyboardRB = new JRadioButton("Keyboard (Player 1)");
-        keyboardSpeedS = new JSlider(JSlider.HORIZONTAL, 10, 150, 50);
+        keyboardSpeedS1 = new JSlider(JSlider.HORIZONTAL, 10, 150, 50);
+        keyboardSpeedS2 = new JSlider(JSlider.HORIZONTAL, 10, 150, 50);
         musicCB = new JCheckBox("Music");
         
         onePlayerRB.setBackground(Color.darkGray);
         twoPlayerRB.setBackground(Color.darkGray);
         mouseRB.setBackground(Color.darkGray);
         keyboardRB.setBackground(Color.darkGray);
-        keyboardSpeedS.setBackground(Color.darkGray);              
+        keyboardSpeedS1.setBackground(Color.darkGray);  
+        keyboardSpeedS2.setBackground(Color.darkGray);
         musicCB.setBackground(Color.darkGray);
         
         onePlayerRB.setForeground(Color.WHITE);
         twoPlayerRB.setForeground(Color.WHITE);
         mouseRB.setForeground(Color.WHITE);
         keyboardRB.setForeground(Color.WHITE);
-        keyboardSpeedS.setForeground(Color.WHITE);
+        keyboardSpeedS1.setForeground(Color.WHITE);
+        keyboardSpeedS2.setForeground(Color.WHITE);
         musicCB.setForeground(Color.WHITE);
         
         ButtonGroup playerChoice = new ButtonGroup();
@@ -164,36 +167,85 @@ public class GUI extends JPanel implements ActionListener, EnemyDeletable
         peripheralChoice.add(keyboardRB);
         mouseRB.setSelected(true);
         
+        musicCB.setSelected(true);
+        
         onePlayerRB.setBounds((width/2)+100, (height/2)-50, 100, 20);
         twoPlayerRB.setBounds((width/2)+100, (height/2)-30, 100, 20);
         mouseRB.setBounds((width/2)+100, (height/2), 200, 20);
         keyboardRB.setBounds((width/2)+100, (height/2)+20, 200, 20);
-        keyboardSpeedS.setBounds(width/2-120, height/2+100, 200, 50);
+        keyboardSpeedS1.setBounds(width/2-120, height/2+100, 200, 50);
+        keyboardSpeedS2.setBounds(width/2-120, height/2+183, 200, 50);
         musicCB.setBounds((width/2)+100, (height/2)+50, 100, 20);
  
-        JLabel keyboardSpeedL = new JLabel("Keyboard Speed");
-        keyboardSpeedL.setForeground(Color.WHITE);
-        keyboardSpeedL.setBounds(width/2-113, height/2+70, 200, 50);
+        JLabel keyboardSpeedL1 = new JLabel("Keyboard Speed (Player One)");
+        keyboardSpeedL1.setForeground(Color.WHITE);
+        keyboardSpeedL1.setBounds(width/2-113, height/2+67, 200, 50);
+        
+        JLabel keyboardSpeedL2 = new JLabel("Keyboard Speed (Player Two)");
+        keyboardSpeedL2.setForeground(Color.WHITE);
+        keyboardSpeedL2.setBounds(width/2-113, height/2+150, 200, 50);
+        
+        howTo = new JButton("How To Play");
+        howTo.addActionListener(this);
+        howTo.setBounds((width/2)-60, height/2+30, 120, 20);
+        
+        howToL = new JLabel();
+        howToL.setBackground(Color.BLACK);
+        howToL.setOpaque(true);
+        howToL.setForeground(Color.cyan);
+        howToL.setFont(new Font("sansserif", 4, 16));            
+        howToL.setBounds((int)(width/2-width*0.25),(int)(height/2-height*0.25),(int)(width*0.5),(int)(height*0.5)); 
+        howToL.setHorizontalAlignment(JLabel.CENTER);
+        howToL.setBorder(BorderFactory.createLineBorder(Color.CYAN.darker()));
+        
+        howToBack = new JButton("X");
+        howToBack.setBounds((int)(width/2+width*0.25)-50, (int)(height/2-height*0.25), 50, 50);
+        howToBack.setBackground(Color.BLACK);
+        howToBack.setForeground(Color.WHITE);
+        howToBack.addActionListener(this);
         
         menu.add(title);
         menu.add(specialTitle);
         menu.add(author);
         menu.add(easy);
         menu.add(hard);
+        menu.add(howTo);
         menu.add(highscoreL);
         menu.add(onePlayerRB);
         menu.add(twoPlayerRB);
         menu.add(mouseRB);
         menu.add(keyboardRB);
-        menu.add(keyboardSpeedL);
-        menu.add(keyboardSpeedS);
+        menu.add(keyboardSpeedL1);
+        menu.add(keyboardSpeedL2);
+        menu.add(keyboardSpeedS1);
+        menu.add(keyboardSpeedS2);
         menu.add(musicCB);    
         
         back = new JButton("Back");
-        back.setBounds(width/2-40, height/2+20, 100, 20);
+        back.setBounds(width/2-40, height/2, 100, 20);
         back.addActionListener(this);
         back.setVisible(false);
         this.add(back);
+        
+        howToL.setText(""
+            + "<HTML>HOW TO PLAY<BR><BR>"
+            + "You are the white dot. Avoid all other dots.<BR><BR>"
+            + "If using the mouse: <BR>"
+            + "--  The movement is by the mouse<BR>"
+            + "--  Left click detonates a local bomb<BR>"
+            + "--  Right click plants a remote bomb<BR><BR>"
+            + "If using the keyboard: <BR>"
+            + "--  The movement is by WASD<BR>"
+            + "--  Spacebar detonates a local bomb<BR>"
+            + "--  F plants a remote bomb<BR><BR>"
+            + "If both using the keyboard (Second Player): <BR>"
+            + "--  The movement is by NUMPAD 8(up) 4(left) 5(down) 6(right) <BR>"
+            + "--  NUMPAD 0 detonates a local bomb<BR>"
+            + "--  NUMPAD 1 plants a remote bomb<BR><BR>"     
+            + "Bomb reloads are displayed by the pink bars at the top.<BR>"
+            + "You have 3 live.<BR><BR>"
+            + "Use them wisely.<BR>"   
+            + "</HTML>");
     }
     
     private void audioSetup() {
@@ -817,6 +869,46 @@ public class GUI extends JPanel implements ActionListener, EnemyDeletable
             back.setVisible(false);
             this.revalidate();        
             repaint();            
+        }
+        else if(e.getSource() == howTo)
+        {
+            menu.add(howToL);
+            menu.add(howToBack);
+            menu.setComponentZOrder(howToL, 0);
+            menu.setComponentZOrder(howToBack, 0);
+            
+            menu.remove(easy);
+            menu.remove(hard);
+            menu.remove(howTo);
+            menu.remove(onePlayerRB);
+            menu.remove(twoPlayerRB);
+            menu.remove(mouseRB);
+            menu.remove(keyboardRB);
+            menu.remove(keyboardSpeedS1);
+            menu.remove(keyboardSpeedS2);
+            menu.remove(musicCB);   
+            
+            menu.revalidate();
+            menu.repaint();         
+        }
+        else if(e.getSource() == howToBack)
+        {           
+            menu.remove(howToL);
+            menu.remove(howToBack);
+            
+            menu.add(easy);
+            menu.add(hard);
+            menu.add(howTo);
+            menu.add(onePlayerRB);
+            menu.add(twoPlayerRB);
+            menu.add(mouseRB);
+            menu.add(keyboardRB);
+            menu.add(keyboardSpeedS1);
+            menu.add(keyboardSpeedS2);
+            menu.add(musicCB);   
+            
+            menu.revalidate();
+            menu.repaint();           
         }
     }
 }
