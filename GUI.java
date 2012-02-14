@@ -108,7 +108,7 @@ public class GUI extends JPanel implements ActionListener, EnemyDeletable
         
         try
         { 
-            BufferedImage menuIMG = ImageIO.read(new File("MenuBackground.png")); 
+            BufferedImage menuIMG = ImageIO.read(this.getClass().getResource("/Resources/MenuBackground.png")); 
             menuIMGL = new JLabel(new ImageIcon(menuIMG.getScaledInstance((int)(width*0.8), (int)(height*0.8), Image.SCALE_SMOOTH)));
             menuIMGL.setBounds(0,0,width,height);
         }catch(Exception e) {}
@@ -186,7 +186,7 @@ public class GUI extends JPanel implements ActionListener, EnemyDeletable
                    
         try
         { 
-            BufferedImage howToIMG = ImageIO.read(new File("HowTo.png")); 
+            BufferedImage howToIMG = ImageIO.read(this.getClass().getResource("/Resources/HowTo.png")); 
             howToIMGL = new JLabel(new ImageIcon(howToIMG));
             howToIMGL.setBounds(width/2-howToIMG.getWidth()/2,height/2-howToIMG.getHeight()/2,howToIMG.getWidth(),howToIMG.getHeight());
         }catch(Exception e) {}

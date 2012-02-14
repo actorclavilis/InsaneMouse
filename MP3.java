@@ -1,5 +1,5 @@
 import java.io.BufferedInputStream;
-import java.io.FileInputStream;
+import java.io.InputStream;
 import javazoom.jl.player.*;
 
 class MP3 
@@ -20,7 +20,7 @@ class MP3
                     {                       
                         try 
                         {   
-                            FileInputStream fi = new FileInputStream("Tonic.mp3");
+                            InputStream fi = this.getClass().getResource("/Resources/Tonic.mp3").openStream();
                             BufferedInputStream bis = new BufferedInputStream(fi);
                             player = new Player(bis); 
                             player.play(); 
