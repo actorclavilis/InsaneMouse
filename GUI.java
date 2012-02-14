@@ -39,7 +39,7 @@ public class GUI extends JPanel implements ActionListener, EnemyDeletable
     private java.util.List players;
     private Thread t, r;   
     private scbClass scbInstance = new scbClass();
-    private MP3 mp3;
+    //private MP3 mp3;
     
     public GUI(Dimension a) throws Exception
     {                   
@@ -48,7 +48,7 @@ public class GUI extends JPanel implements ActionListener, EnemyDeletable
         this.setBackground(Color.darkGray);
         this.setLayout(null);
         this.setBounds(0, 0, d.width, d.height); 
-        this.setFocusable(true);
+        //this.setFocusable(true);
         this.setVisible(true);
         
         highscore = 0;          
@@ -249,6 +249,7 @@ public class GUI extends JPanel implements ActionListener, EnemyDeletable
     }
     
     private void audioSetup() {
+        /*
         if(musicCB.isSelected())
         {
             try 
@@ -259,7 +260,7 @@ public class GUI extends JPanel implements ActionListener, EnemyDeletable
                 }
             } catch (Exception e) {}
             mp3.play();
-        }
+        }*/
     }
     
     private void setup()
