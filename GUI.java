@@ -20,7 +20,7 @@ public class GUI extends JPanel implements ActionListener, EnemyDeletable
       
     private JPanel menu;
     private JButton easy, hard, back, howTo, howToBack;
-    private JLabel highscoreL, howToIMGL, specialTitle, title, author, keyboardSpeedL1, keyboardSpeedL2;
+    private JLabel highscoreL, howToIMGL, menuIMGL, keyboardSpeedL1, keyboardSpeedL2;
     private JRadioButton onePlayerRB, twoPlayerRB, mouseRB, keyboardRB;
     private JCheckBox musicCB;
     private JSlider keyboardSpeedS1, keyboardSpeedS2;
@@ -102,26 +102,18 @@ public class GUI extends JPanel implements ActionListener, EnemyDeletable
     private void makeMenuScreen()
     {     
         menu = new JPanel();
-        menu.setBackground(Color.darkGray);
+        menu.setBackground(Color.BLACK);
         menu.setLayout(null);
         menu.setBounds(0, 0, width, height);   
         
-        specialTitle = new JLabel("I                  M");
-        specialTitle.setFont(new Font("sansserif", 3, 32));
-        specialTitle.setBounds((width/2)-140, (height/2)-250, 600, 100);
-        specialTitle.setForeground(Color.RED.brighter());
+        try
+        { 
+            BufferedImage menuIMG = ImageIO.read(new File("MenuBackground.png")); 
+            menuIMGL = new JLabel(new ImageIcon(menuIMG.getScaledInstance((int)(width*0.8), (int)(height*0.8), Image.SCALE_SMOOTH)));
+            menuIMGL.setBounds(0,0,width,height);
+        }catch(Exception e) {}
         
-        title = new JLabel("  NSANE        OUSE");
-        title.setFont(new Font("sansserif", 3, 32));
-        title.setBounds((width/2)-140, (height/2)-250, 600, 100);
-        title.setForeground(Color.white);
-        
-        author = new JLabel("By SJ and HH");
-        author.setFont(new Font("monospaced", 1, 17));
-        author.setBackground(Color.darkGray);
-        author.setBounds((width/2)-50, (height/2)-200, 500, 100);
-        author.setForeground(Color.white);
-        
+       
         highscoreL = new JLabel(String.valueOf(highscore));
         highscoreL.setBackground(Color.darkGray);
         highscoreL.setBounds((width/2)+100, (height/2)+70, 500, 100);
@@ -144,13 +136,13 @@ public class GUI extends JPanel implements ActionListener, EnemyDeletable
         keyboardSpeedS2 = new JSlider(JSlider.HORIZONTAL, 10, 300, 50);
         musicCB = new JCheckBox("Music");
         
-        onePlayerRB.setBackground(Color.darkGray);
-        twoPlayerRB.setBackground(Color.darkGray);
-        mouseRB.setBackground(Color.darkGray);
-        keyboardRB.setBackground(Color.darkGray);
-        keyboardSpeedS1.setBackground(Color.darkGray);  
-        keyboardSpeedS2.setBackground(Color.darkGray);
-        musicCB.setBackground(Color.darkGray);
+        onePlayerRB.setBackground(null);
+        twoPlayerRB.setBackground(null);
+        mouseRB.setBackground(null);
+        keyboardRB.setBackground(null);
+        keyboardSpeedS1.setBackground(null);  
+        keyboardSpeedS2.setBackground(null);
+        musicCB.setBackground(null);
         
         onePlayerRB.setForeground(Color.WHITE);
         twoPlayerRB.setForeground(Color.WHITE);
@@ -204,10 +196,7 @@ public class GUI extends JPanel implements ActionListener, EnemyDeletable
         howToBack.setBackground(Color.BLACK);
         howToBack.setForeground(Color.WHITE);
         howToBack.addActionListener(this);
-        
-        menu.add(title);
-        menu.add(specialTitle);
-        menu.add(author);
+               
         menu.add(easy);
         menu.add(hard);
         menu.add(howTo);
@@ -220,7 +209,8 @@ public class GUI extends JPanel implements ActionListener, EnemyDeletable
         menu.add(keyboardSpeedL2);
         menu.add(keyboardSpeedS1);
         menu.add(keyboardSpeedS2);
-        menu.add(musicCB);    
+        menu.add(musicCB);   
+        menu.add(menuIMGL);
         
         back = new JButton("Back");
         back.setBounds(width/2-40, height/2, 100, 20);
@@ -860,21 +850,15 @@ public class GUI extends JPanel implements ActionListener, EnemyDeletable
             
             menu.add(howToBack);
             menu.add(howToIMGL);
-            //menu.add(howToL);
-                       
-            
+
             menu.revalidate();
             menu.repaint();         
         }
         else if(e.getSource() == howToBack)
         {           
-            //menu.remove(howToL);
             menu.remove(howToIMGL);
             menu.remove(howToBack);
             
-            menu.add(specialTitle);
-            menu.add(title);
-            menu.add(author);
             menu.add(keyboardSpeedL1);
             menu.add(keyboardSpeedL2);
             menu.add(easy);
@@ -888,6 +872,7 @@ public class GUI extends JPanel implements ActionListener, EnemyDeletable
             menu.add(keyboardSpeedS2);
             menu.add(musicCB);   
             menu.add(highscoreL);
+            menu.add(menuIMGL);
             
             menu.revalidate();
             menu.repaint();           
