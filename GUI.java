@@ -42,7 +42,7 @@ public class GUI extends JPanel implements ActionListener, EnemyDeletable
     private Thread t, r;   
     private scbClass scbInstance = new scbClass();
 
-    //private MP3 mp3; 
+    private MP3 mp3; 
     
     public GUI(Dimension a) throws Exception
     {                   
@@ -109,8 +109,8 @@ public class GUI extends JPanel implements ActionListener, EnemyDeletable
         
         try
         { 
-            //BufferedImage menuIMG = ImageIO.read(this.getClass().getResource("/Resources/MenuBackground.png")); 
-            BufferedImage menuIMG = ImageIO.read(new File("M:/ComputerProgrammingJava/InsaneMouse_03/src/Resources/MenuBackground.png")); 
+            BufferedImage menuIMG = ImageIO.read(this.getClass().getResource("/Resources/MenuBackground.png")); 
+            //BufferedImage menuIMG = ImageIO.read(new File("M:/ComputerProgrammingJava/InsaneMouse_03/src/Resources/MenuBackground.png")); 
             menuIMGL = new JLabel(new ImageIcon(menuIMG.getScaledInstance((int)(width*0.8), (int)(height*0.8), Image.SCALE_SMOOTH)));
             menuIMGL.setBounds(0,0,width,height);
         }catch(Exception e) {}
@@ -188,8 +188,8 @@ public class GUI extends JPanel implements ActionListener, EnemyDeletable
                    
         try
         { 
-            //BufferedImage howToIMG = ImageIO.read(this.getClass().getResource("/Resources/HowTo.png")); 
-            BufferedImage howToIMG = ImageIO.read(new File("M:/ComputerProgrammingJava/InsaneMouse_03/src/Resources/HowTo.png")); 
+            BufferedImage howToIMG = ImageIO.read(this.getClass().getResource("/Resources/HowTo.png")); 
+            //BufferedImage howToIMG = ImageIO.read(new File("M:/ComputerProgrammingJava/InsaneMouse_03/src/Resources/HowTo.png")); 
             howToIMGL = new JLabel(new ImageIcon(howToIMG));
             howToIMGL.setBounds(width/2-howToIMG.getWidth()/2,height/2-howToIMG.getHeight()/2,howToIMG.getWidth(),howToIMG.getHeight());
         }catch(Exception e) {}
@@ -222,8 +222,8 @@ public class GUI extends JPanel implements ActionListener, EnemyDeletable
         this.add(back);       
     }
     
-    private void audioSetup() {
-        /*
+    private void audioSetup() 
+    {       
         if(musicCB.isSelected())
         {
             try 
@@ -234,7 +234,7 @@ public class GUI extends JPanel implements ActionListener, EnemyDeletable
                 }
             } catch (Exception e) {}
             mp3.play();
-        }*/
+        }
     }
     
     private void setup()
@@ -614,7 +614,7 @@ public class GUI extends JPanel implements ActionListener, EnemyDeletable
                             }
                             if(musicCB.isSelected())
                             {
-                                //mp3.stop();
+                                mp3.stop();
                             }
                             break;
                         } 
