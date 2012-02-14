@@ -41,11 +41,8 @@ public class GUI extends JPanel implements ActionListener, EnemyDeletable
     private java.util.List players;
     private Thread t, r;   
     private scbClass scbInstance = new scbClass();
-<<<<<<< HEAD
-    //private MP3 mp3;
-=======
-    private MP3 mp3;    
->>>>>>> origin/master
+
+    //private MP3 mp3; 
     
     public GUI(Dimension a) throws Exception
     {                   
@@ -54,7 +51,7 @@ public class GUI extends JPanel implements ActionListener, EnemyDeletable
         this.setBackground(Color.darkGray);
         this.setLayout(null);
         this.setBounds(0, 0, d.width, d.height); 
-        //this.setFocusable(true);
+        this.setFocusable(true);
         this.setVisible(true);
         
         highscore = 0;          
@@ -112,7 +109,8 @@ public class GUI extends JPanel implements ActionListener, EnemyDeletable
         
         try
         { 
-            BufferedImage menuIMG = ImageIO.read(this.getClass().getResource("/Resources/MenuBackground.png")); 
+            //BufferedImage menuIMG = ImageIO.read(this.getClass().getResource("/Resources/MenuBackground.png")); 
+            BufferedImage menuIMG = ImageIO.read(new File("M:/ComputerProgrammingJava/InsaneMouse_03/src/Resources/MenuBackground.png")); 
             menuIMGL = new JLabel(new ImageIcon(menuIMG.getScaledInstance((int)(width*0.8), (int)(height*0.8), Image.SCALE_SMOOTH)));
             menuIMGL.setBounds(0,0,width,height);
         }catch(Exception e) {}
@@ -190,7 +188,8 @@ public class GUI extends JPanel implements ActionListener, EnemyDeletable
                    
         try
         { 
-            BufferedImage howToIMG = ImageIO.read(this.getClass().getResource("/Resources/HowTo.png")); 
+            //BufferedImage howToIMG = ImageIO.read(this.getClass().getResource("/Resources/HowTo.png")); 
+            BufferedImage howToIMG = ImageIO.read(new File("M:/ComputerProgrammingJava/InsaneMouse_03/src/Resources/HowTo.png")); 
             howToIMGL = new JLabel(new ImageIcon(howToIMG));
             howToIMGL.setBounds(width/2-howToIMG.getWidth()/2,height/2-howToIMG.getHeight()/2,howToIMG.getWidth(),howToIMG.getHeight());
         }catch(Exception e) {}
@@ -615,7 +614,7 @@ public class GUI extends JPanel implements ActionListener, EnemyDeletable
                             }
                             if(musicCB.isSelected())
                             {
-                                mp3.stop();
+                                //mp3.stop();
                             }
                             break;
                         } 
