@@ -12,7 +12,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import util.*;
 
-public class GUI extends JPanel implements ActionListener, EnemyDeletable
+public class GUI extends JPanel implements ActionListener, EnemyDeletable, Incrementable
 {
     private Dimension d; 
       
@@ -24,7 +24,8 @@ public class GUI extends JPanel implements ActionListener, EnemyDeletable
     private JSlider keyboardSpeedS1, keyboardSpeedS2;
     
     private int ballN, monsterN, counterN, randomN, rainN, bombN, monsterMultiplier;
-    private int multiplier,highscore, score, level;
+    private int multiplier,highscore, score, scoreBonus, level;
+    private float scoreMultiplier;
     private int invSpeed, width, height, timeDifficulty1, distanceLimit;
     private int[] borders, deathLocation;
     
@@ -69,13 +70,13 @@ public class GUI extends JPanel implements ActionListener, EnemyDeletable
         
         players = new ArrayList(twoPlayerRB.isSelected()?2:1);
         if (mouseRB.isSelected()) {
-            MouseControlledPlayer p1 = new MouseControlledPlayer(width / 2, height / 2, 3, true, this, 3, 1, width);
+            MouseControlledPlayer p1 = new MouseControlledPlayer(width / 2, height / 2, 3, true, this, this, 3, 1, width);
             addMouseMotionListener(p1);
             addMouseListener(p1);
             players.add(p1);
         } else {
             KeyboardControlledPlayer p1 =
-                    new KeyboardControlledPlayer(width / 2, height / 2, 3, true, this, 3, KeyEvent.VK_W, KeyEvent.VK_A, KeyEvent.VK_S, KeyEvent.VK_D, keyboardSpeedS1.getValue(), KeyEvent.VK_SPACE, KeyEvent.VK_F, 1, width);
+                    new KeyboardControlledPlayer(width / 2, height / 2, 3, true, this, this, 3, KeyEvent.VK_W, KeyEvent.VK_A, KeyEvent.VK_S, KeyEvent.VK_D, keyboardSpeedS1.getValue(), KeyEvent.VK_SPACE, KeyEvent.VK_F, 1, width);
             KeyboardFocusManager.getCurrentKeyboardFocusManager().addKeyEventDispatcher(p1);
             players.add(p1);
         }
@@ -83,14 +84,14 @@ public class GUI extends JPanel implements ActionListener, EnemyDeletable
         if(twoPlayerRB.isSelected()){
             if (mouseRB.isSelected()) {
                 KeyboardControlledPlayer p2 =
-                    new KeyboardControlledPlayer(width / 2, height / 2, 3, true, this, 3, KeyEvent.VK_W, KeyEvent.VK_A, KeyEvent.VK_S, KeyEvent.VK_D, keyboardSpeedS2.getValue(), KeyEvent.VK_SPACE, KeyEvent.VK_F, 2, width);
+                    new KeyboardControlledPlayer(width / 2, height / 2, 3, true, this, this, 3, KeyEvent.VK_W, KeyEvent.VK_A, KeyEvent.VK_S, KeyEvent.VK_D, keyboardSpeedS2.getValue(), KeyEvent.VK_SPACE, KeyEvent.VK_F, 2, width);
                 KeyboardFocusManager.getCurrentKeyboardFocusManager().addKeyEventDispatcher(p2);
                 players.add(p2);
             }
             else
             {
                 KeyboardControlledPlayer p2 =
-                        new KeyboardControlledPlayer(width / 2, height / 2, 3, true, this, 3, KeyEvent.VK_NUMPAD8, KeyEvent.VK_NUMPAD4, KeyEvent.VK_NUMPAD5, KeyEvent.VK_NUMPAD6, keyboardSpeedS2.getValue(), KeyEvent.VK_NUMPAD0, KeyEvent.VK_NUMPAD1, 2, width);
+                        new KeyboardControlledPlayer(width / 2, height / 2, 3, true, this, this, 3, KeyEvent.VK_NUMPAD8, KeyEvent.VK_NUMPAD4, KeyEvent.VK_NUMPAD5, KeyEvent.VK_NUMPAD6, keyboardSpeedS2.getValue(), KeyEvent.VK_NUMPAD0, KeyEvent.VK_NUMPAD1, 2, width);
                 KeyboardFocusManager.getCurrentKeyboardFocusManager().addKeyEventDispatcher(p2);
                 players.add(p2);
             }
@@ -291,7 +292,9 @@ public class GUI extends JPanel implements ActionListener, EnemyDeletable
         ballN = 1; 
         level = 1;
         timeLast = 0;        
-        score = 0;        
+        score = 0;  
+        scoreBonus = 0;   
+        scoreMultiplier = 1;   
         counterN = 10;
         timeCircle = 0;
         timeCircleSwitch = 0;
@@ -614,6 +617,10 @@ public class GUI extends JPanel implements ActionListener, EnemyDeletable
         }
     }
     
+    private int getScore() {
+    	return (int)((score+scoreBonus)*scoreMultiplier);
+    }
+    
     int iter = 0;
     private void animate()
     {
@@ -629,9 +636,9 @@ public class GUI extends JPanel implements ActionListener, EnemyDeletable
                         
                         if(!onePlayerAlive)
                         {                       
-                            if(highscore < score)
+                            if(highscore < getScore())
                             {
-                                highscore = score;
+                                highscore = getScore();
                                 highscoreL.setText(String.valueOf(highscore));
                             }
                             if(musicCB.isSelected())
@@ -719,9 +726,11 @@ public class GUI extends JPanel implements ActionListener, EnemyDeletable
         r.start();
     }
     
-    public void deleteIf(EnemyPredicate p) {
+    public int deleteIf(EnemyPredicate p) {
+        int t = 0;
         try
         {
+
             Set newEnemies = new HashSet(enemies.size());
             Iterator i = enemies.iterator();
             while (i.hasNext()) {
@@ -729,10 +738,12 @@ public class GUI extends JPanel implements ActionListener, EnemyDeletable
                 if (!p.satisfiedBy(e)) {
                     newEnemies.add(e);
                 }
+                else t++;
             }
             enemies = newEnemies;
         }catch(Exception e)
         {}
+        return t;
     }
     
     private void movePlayers()
@@ -786,7 +797,7 @@ public class GUI extends JPanel implements ActionListener, EnemyDeletable
         drawPlayers(g);
         g.setColor(Color.WHITE);
         g.drawString("Score", width - 60, 25);
-        g.drawString(String.valueOf(score), width-60, 40);
+        g.drawString(Integer.toString(getScore()), width-60, 40);
         
         if(countdownF)
         {
@@ -828,6 +839,7 @@ public class GUI extends JPanel implements ActionListener, EnemyDeletable
                         if((e.collidesWith(p.getX(), p.getY()))&&(!p.getImmunity())) {
                             p.decLives(p.getX(), p.getY());
                             p.setImmunity(true);
+                            scoreMultiplier /= 2;
                         }
                     }
                     e.paint(g);
@@ -838,6 +850,10 @@ public class GUI extends JPanel implements ActionListener, EnemyDeletable
             
         }     
         drawLayout(g);       
+    }
+    
+    public void increment(int delta) {
+    	scoreBonus += delta;
     }
        
     public void actionPerformed(ActionEvent e)
@@ -874,8 +890,8 @@ public class GUI extends JPanel implements ActionListener, EnemyDeletable
         {
             menu.add(howToL);
             menu.add(howToBack);
-            menu.setComponentZOrder(howToL, 0);
-            menu.setComponentZOrder(howToBack, 0);
+           // menu.setComponentZOrder(howToL, 0);
+            //menu.setComponentZOrder(howToBack, 0);
             
             menu.remove(easy);
             menu.remove(hard);

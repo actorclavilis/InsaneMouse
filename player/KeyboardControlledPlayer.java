@@ -2,7 +2,7 @@ package player;
 
 import java.awt.KeyEventDispatcher;
 import java.awt.event.KeyEvent;
-import util.EnemyDeletable;
+import util.*;
 
 public class KeyboardControlledPlayer extends Player implements KeyEventDispatcher {
     private int up, left, down, right, sbskey, sbsRkey;
@@ -10,10 +10,10 @@ public class KeyboardControlledPlayer extends Player implements KeyEventDispatch
     private boolean mUp = false, mLeft = false, mDown = false, mRight = false;
     
     public KeyboardControlledPlayer(int _x, int _y, int _lives, boolean _active,
-                                    EnemyDeletable _parent, int _infoOffset,
+                                    EnemyDeletable _parent, Incrementable _score, int _infoOffset,
                                     int _up, int _left, int _down, int _right,
                                     int _speed, int _sbskey, int _sbsRkey, int _playerNumber, int _width) {
-        super(_x, _y, _lives, _active, _parent, _infoOffset, _playerNumber, _width);
+        super(_x, _y, _lives, _active, _parent, _score, _infoOffset, _playerNumber, _width);
         up = _up; down = _down; left = _left; right = _right;
         speed = (float)_speed/100;
         sbskey = _sbskey; sbsRkey = _sbsRkey;

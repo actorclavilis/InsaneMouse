@@ -1,8 +1,7 @@
 package player;
 
 import enemies.Enemy;
-import util.EnemyDeletable;
-import util.EnemyPredicate;
+import util.*;
 import java.awt.*;
 
 public class SenbonSakura
@@ -11,19 +10,22 @@ public class SenbonSakura
             SENBONSAKURA_RADIUS = 250, 
             SENBONSAKURA_SQUARE = SENBONSAKURA_RADIUS*SENBONSAKURA_RADIUS,
             SENBONSAKURA_TIMEOUT = 5000,
-            SENBONSAKURA_TIMER = 5000;  
+            SENBONSAKURA_TIMER = 5000,
+            BONUS = 100, REMOTE_BONUS = 300;
     private long senbonSakuraT = 0;
     protected EnemyDeletable parent;
     protected int playerNumber, width, infoOffset, senbonSakuraC;
     protected float x, y, remoteX, remoteY;
     protected boolean detonateLocal = false, detonateRemote = false;
+    protected Incrementable score;
     
-    public SenbonSakura(int _width, int _infoOffset, int _playerNumber, EnemyDeletable _parent)
+    public SenbonSakura(int _width, int _infoOffset, int _playerNumber, EnemyDeletable _parent, Incrementable _score)
     {
         width = _width;
         infoOffset = _infoOffset;
         playerNumber = _playerNumber;
         parent = _parent;
+        score = _score;
     }
     
     public void detonateLocal(float _x, float _y)
@@ -53,15 +55,15 @@ public class SenbonSakura
     
     private void doRemoval(final float _x, final float _y)
     {
-        parent.deleteIf(new EnemyPredicate() 
-        {
-                public boolean satisfiedBy(Enemy e) 
-                {
-                    float p1 = (_x + 5) - e.getX();
-                    float p2 = (_y + 5) - e.getY();
-                    return (p1*p1 + p2*p2) < SENBONSAKURA_SQUARE;
-                }
-        });
+		score.increment((detonateRemote? REMOTE_BONUS: BONUS) * parent.deleteIf(new EnemyPredicate() 
+	        {
+	                public boolean satisfiedBy(Enemy e) 
+	                {
+	                    float p1 = (_x + 5) - e.getX();
+	                    float p2 = (_y + 5) - e.getY();
+	                    return (p1*p1 + p2*p2) < SENBONSAKURA_SQUARE;
+	                }
+	        }));
     }
     
     public void paint(Graphics g) 

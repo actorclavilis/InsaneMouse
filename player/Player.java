@@ -1,6 +1,6 @@
 package player;
 
-import util.EnemyDeletable;
+import util.*;
 import java.awt.*;
 
 public abstract class Player {
@@ -14,14 +14,14 @@ public abstract class Player {
     protected float y;
     protected SenbonSakura s;
 
-    public Player(int _x, int _y, int numberOfLives, boolean startActive, EnemyDeletable _parent, int _infoOffset, int _playerNumber, int _width) 
+    public Player(int _x, int _y, int numberOfLives, boolean startActive, EnemyDeletable _parent, Incrementable _score, int _infoOffset, int _playerNumber, int _width) 
     {
         lives = numberOfLives;
         isActive = startActive;
         x = _x;
         y = _y;
         
-        s = new SenbonSakura(_width, _infoOffset, _playerNumber, _parent);       
+        s = new SenbonSakura(_width, _infoOffset, _playerNumber, _parent, _score);       
     }
 
     public int getX() 
